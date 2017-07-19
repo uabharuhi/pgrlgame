@@ -6,11 +6,18 @@ screen = None
 walls = None
 doors = None
 clock = None
-
+hero = None
 W = 20
 H = 20
 ETYPE_WALL = 0
 ETYPE_DOOR = 1
+ETYPE_HERO = 2
+
+DIRECTION_UP = 0
+DIRECTION_RIGHT = 1
+DIRECTION_DOWN = 2
+DIRECTION_LEFT = 3
+
 level = [
 #123456789012345678901234567890
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
@@ -50,17 +57,26 @@ def init_game():
     walls = [] # List to hold the walls
     doors = []
 
+    hero = entity.Hero((40,40),ETYPE_HERO,1,DIRECTION_RIGHT)
+
+
+
     x = y = 0
     for row in level:
         for col in row:
             if col == "W":
-                entity.Wall((x, y)).render()
+                entity.Wall((x, y))
             if col.isdigit():
                 room_id = int(col)
-                entity.Door((x,y),room_id).render()
-                print(room_id)
+                entity.Door((x,y),room_id)
             x += W
         y += H
         x = 0
     pygame.display.flip()
     #player = Player() # Create the player
+
+def render_all():
+    hero.render()
+    for wall in walls:
+        wall.render()
+    pygame.display.flip()
