@@ -50,6 +50,7 @@ def init_game():
     pygame.init()
     # Set up the display
     pygame.display.set_caption("test")
+    #pygame.key.set_repeat(10,10)
     #                                 width ,height
     screen = pygame.display.set_mode((800, 600))
 
@@ -57,7 +58,7 @@ def init_game():
     walls = [] # List to hold the walls
     doors = []
 
-    hero = entity.Hero((40,40),ETYPE_HERO,1,DIRECTION_RIGHT)
+    hero = entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
 
 
 

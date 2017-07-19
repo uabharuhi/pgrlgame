@@ -46,22 +46,23 @@ class Movable(Entity):
 
 
     def check_collision(self,next_rect,you):
-        return next_rect.colliderect(you)
+        return next_rect.colliderect(you.rect)
 
     def collide(self,you):
         pass
+
     def move(self,dx,dy):
-        next_pos = (pos[0]+dx,pos[1]+dy)
+        next_pos = (self.pos[0]+dx,self.pos[1]+dy)
         next_rect =  pygame.Rect(self.pos[0]+dx,self.pos[1]+dy,glb.W,glb.H)
         #check collide
             #...
         if dx > 0 :
             self.direction = glb.DIRECTION_RIGHT
-        if dx < 0 :
+        elif dx < 0 :
             self.direction = glb.DIRECTION_LEFT
-        if dy > 0 :
+        elif dy > 0 :
             self.direction = glb.DIRECTION_DOWN
-        if dy < 0 :
+        elif dy < 0 :
             self.direction = glb.DIRECTION_UP
         self.pos = next_pos
         self.rect = next_rect
