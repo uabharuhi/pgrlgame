@@ -41,6 +41,7 @@ class Entity:
         for you in victim_list:
             if you.etype == glb.ETYPE_WALL:
                 self.action_dict["STOP_MOVE"] = True
+        return victim_list
 
     def check_collision(self,you):
         #self x,y,w,h
@@ -157,9 +158,9 @@ class Hero(Movable):
     def take_actions(self):
         super().take_actions()
         self.action_dict = {} 
+
     def check_all_collision(self):
-        if super().check_all_collision(): 
+        l = super().check_all_collision()
+        for you in l :
             if you.etype == glb.ETYPE_DOOR:
-                pass
-            return True
-        return False
+                self.action_dict["STOP_MOVE"] = True

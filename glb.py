@@ -58,9 +58,9 @@ def init_game():
     clock = pygame.time.Clock()
     walls = [] # List to hold the walls
     doors = []
-
+    #create hero
     hero = entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
-
+    #create monster
 
 
     x = y = 0
@@ -75,10 +75,9 @@ def init_game():
         y += H
         x = 0
     pygame.display.flip()
-    #player = Player() # Create the player
+   
 
 def render_all():
-    hero.render()
-    for wall in walls:
-        wall.render()
+    for et in entity_list:
+        et.render()
     pygame.display.flip()
