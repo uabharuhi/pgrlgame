@@ -2,22 +2,37 @@
 import entity
 import pygame
 
+W = 20
+H = 20
+
 screen = None
 walls = None
 doors = None
 clock = None
 hero = None
+monster = None
+
+current_room = 0
+#monster_init_pos[current_room_id] --> list of pos of monter
+monster_room_pos = [  [ (8*W,4*H) ] ]
+
 entity_list  = []
-W = 20
-H = 20
+monster_list=  []
 ETYPE_WALL = 0
 ETYPE_DOOR = 1
 ETYPE_HERO = 2
+ETYPE_MONSTER = 2
 
 DIRECTION_UP = 0
 DIRECTION_RIGHT = 1
 DIRECTION_DOWN = 2
 DIRECTION_LEFT = 3
+
+
+
+
+
+monster_init_pos = []
 
 level = [
 #123456789012345678901234567890
@@ -59,8 +74,11 @@ def init_game():
     walls = [] # List to hold the walls
     doors = []
     #create hero
-    hero = entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
+    entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
     #create monster
+    
+    for m_pos in monster_room_pos[0] :
+        entity.Monster(m_pos,ETYPE_MONSTER,W,DIRECTION_LEFT)
 
 
     x = y = 0

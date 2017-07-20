@@ -1,5 +1,5 @@
 import glb
-import entity
+#import entity
 import pygame
 
 
@@ -51,9 +51,10 @@ while running:
                 key_lock[3] = False
 
         # monster lookhead 
-
+    #too lag
     for et in glb.entity_list:
-        et.check_all_collision()
+        pass
+    hero.check_all_collision()
 
 
     for et in glb.entity_list:

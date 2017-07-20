@@ -77,6 +77,7 @@ class Entity:
         self.rect = pygame.Rect(x,y,glb.W,glb.H)
         self.lookahead_pos = self.pos
         self.lookahead_rect= self.rect
+    #
 
 
 
@@ -164,3 +165,15 @@ class Hero(Movable):
         for you in l :
             if you.etype == glb.ETYPE_DOOR:
                 self.action_dict["STOP_MOVE"] = True
+
+class Monster(Movable):
+    def __init__(self,pos,etype,speed,direction):
+        super().__init__(pos,etype,speed,direction)
+
+        self.img_list.append("monster_up.png")
+        self.img_list.append("monster_right.png")
+        self.img_list.append("monster_down.png")
+        self.img_list.append("monster_left.png")
+        self.load_imgs() 
+
+        glb.monster_list.append(self)
