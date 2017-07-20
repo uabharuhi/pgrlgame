@@ -14,7 +14,12 @@ screen = glb.screen
 #main loop
 running = True
 key_lock = [False,False,False,False]
+# initialize font; must be called after 'pygame.init()' to avoid 'Font not Initialized' error
+#myfont = pygame.font.SysFont("monospace", 15)
 
+# render text
+#label = myfont.render("Some text!", 1, (255,255,0))
+#screen.blit(label, (100, 100))
 
 while running:
     glb.clock.tick(4)
@@ -55,12 +60,13 @@ while running:
     for monster in glb.monster_list:
         monster.lookahead()
     hero.check_all_collision()
-    
+
     for monster in glb.monster_list:
         monster.check_all_collision()
 
 
     for et in glb.entity_list:
+
         et.take_actions()
 
     screen.fill((0, 0, 0))
