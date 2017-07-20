@@ -17,7 +17,7 @@ key_lock = [False,False,False,False]
 
 
 while running:
-    glb.clock.tick(10)
+    glb.clock.tick(4)
     #pressed = False
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
@@ -50,11 +50,14 @@ while running:
             if e.key == pygame.K_LEFT and key_lock[3]:
                 key_lock[3] = False
 
-        # monster lookhead 
+        # monster lookahead 
     #too lag
-    for et in glb.entity_list:
-        pass
+    for monster in glb.monster_list:
+        monster.lookahead()
     hero.check_all_collision()
+    
+    for monster in glb.monster_list:
+        monster.check_all_collision()
 
 
     for et in glb.entity_list:

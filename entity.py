@@ -38,10 +38,27 @@ class Entity:
 
     def check_all_collision(self):
         victim_list = self.detect_collide_objects()
+        self.if_wall_collision(victim_list)
+        self.if_hero_collision(victim_list)
+        self.if_monster_collision(victim_list)
+        self.if_door_collision(victim_list)
+        return victim_list
+
+    def if_wall_collision(self,victim_list):
         for you in victim_list:
             if you.etype == glb.ETYPE_WALL:
                 self.action_dict["STOP_MOVE"] = True
-        return victim_list
+
+    def if_hero_collision(self,victim_list):
+        pass
+
+    def if_monster_collision(self,victim_list):
+        pass
+
+    def if_door_collision(self,victim_list):
+        for you in victim_list:
+            if you.etype == glb.ETYPE_DOOR:
+                self.action_dict["STOP_MOVE"] = True
 
     def check_collision(self,you):
         #self x,y,w,h
@@ -119,7 +136,7 @@ class Movable(Entity):
 
     def take_actions(self):
         if "STOP_MOVE" in self.action_dict:
-    
+           # print('aa')
             self.set_current_pos(self.pos)
         else :
             dx = self.lookahead_pos[0] - self.pos[0]
@@ -161,15 +178,14 @@ class Hero(Movable):
         self.action_dict = {} 
 
     def check_all_collision(self):
-        l = super().check_all_collision()
-        for you in l :
-            if you.etype == glb.ETYPE_DOOR:
-                self.action_dict["STOP_MOVE"] = True
+        super().check_all_collision()
+
 
 class Monster(Movable):
-    def __init__(self,pos,etype,speed,direction):
+    def __init__(self,pos,etype,speed,direction,move_strategy):
         super().__init__(pos,etype,speed,direction)
 
+        self.move_strategy = move_strategy
         self.img_list.append("monster_up.png")
         self.img_list.append("monster_right.png")
         self.img_list.append("monster_down.png")
@@ -177,3 +193,68 @@ class Monster(Movable):
         self.load_imgs() 
 
         glb.monster_list.append(self)
+
+    def  lookahead(self):
+        #print((self.pos[0],self.pos[1]))
+        dx,dy = self.move_strategy.next_move()
+        #print(self.pos)
+        super().lookahead(dx,dy)
+
+    def take_actions(self):
+        super().take_actions()
+        self.action_dict = {} 
+    
+import random
+class RandomMoveStragery:
+    #0. if rest_step is 0
+        #1. generate a direction
+        #2. generate a step 1~3 randomly
+    #rest_step --
+
+
+    def __init__(self):
+        self.rest_step = 0
+        self.signal = {}
+        self.dx = 0 
+        self.dy = 0 
+
+    def next_move(self):
+        if "HIT_WALL" in self.signal:
+            self.rest_step = 0
+            self.dx,self.dy = 0,0
+            self.signal.clear()
+            print('hh')
+            return 0,0
+        if self.rest_step > 0 :
+            pass
+        else :
+            self.rest_step = random.randint(1,3)
+            # up,right,down,left ,stop
+            flag = random.randint(0,4)
+            if flag == 0:
+                self.dx = 0
+                self.dy = 0
+                self.rest_step = 1
+            elif flag == 1:
+                self.dx = 0
+                self.dy = -1
+            elif flag == 2:
+                self.dx = 1
+                self.dy = 0
+            elif flag == 3:
+                self.dx = 0
+                self.dy = 1
+            elif flag == 4:
+                self.dx = -1
+                self.dy = 0
+            self.dx,self.dy =  self.dx*glb.W , self.dy*glb.H
+
+        self.rest_step-=1
+        self.signal.clear()
+        #print((self.dx,self.dy))
+        return self.dx,self.dy
+
+
+
+
+

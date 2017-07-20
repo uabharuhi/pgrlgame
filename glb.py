@@ -76,10 +76,8 @@ def init_game():
     #create hero
     entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
     #create monster
-    
     for m_pos in monster_room_pos[0] :
-        entity.Monster(m_pos,ETYPE_MONSTER,W,DIRECTION_LEFT)
-
+        entity.Monster(m_pos,ETYPE_MONSTER,W,DIRECTION_LEFT,entity.RandomMoveStragery())
 
     x = y = 0
     for row in level:
