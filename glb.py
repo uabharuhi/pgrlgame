@@ -7,6 +7,7 @@ walls = None
 doors = None
 clock = None
 hero = None
+entity_list  = []
 W = 20
 H = 20
 ETYPE_WALL = 0

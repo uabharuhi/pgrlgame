@@ -2,6 +2,10 @@ import glb
 import entity
 import pygame
 
+
+
+
+
 glb.init_game()
 glb.render_all()
 
@@ -10,6 +14,8 @@ screen = glb.screen
 #main loop
 running = True
 key_lock = [False,False,False,False]
+
+
 while running:
     glb.clock.tick(10)
     #pressed = False
@@ -20,19 +26,19 @@ while running:
             running = False
         #can only allow move on axis
         if e.type == pygame.KEYDOWN: #and not  press_flag: # for only once  
-            if True not in key_lock :
-                if e.key == pygame.K_UP and not key_lock[0]: 
-                    hero.move(0, -1*hero.speed)
-                    key_lock[0] = True
-                if e.key == pygame.K_RIGHT and not key_lock[1]:
-                    hero.move(hero.speed, 0)
-                    key_lock[1] = True
-                if e.key == pygame.K_DOWN and not key_lock[2]:
-                    hero.move(0,hero.speed)
-                    key_lock[2] = True
-                if e.key == pygame.K_LEFT and not key_lock[3]:
-                    hero.move(-1*hero.speed, 0)
-                    key_lock[3] = True
+            #if True not in key_lock :
+            if e.key == pygame.K_UP and not key_lock[0]: 
+                hero.lookahead(0, -1*hero.speed)
+                key_lock[0] = True
+            if e.key == pygame.K_RIGHT and not key_lock[1]:
+                hero.lookahead(hero.speed, 0)
+                key_lock[1] = True
+            if e.key == pygame.K_DOWN and not key_lock[2]:
+                hero.lookahead(0,hero.speed)
+                key_lock[2] = True
+            if e.key == pygame.K_LEFT and not key_lock[3]:
+                hero.lookahead(-1*hero.speed, 0)
+                key_lock[3] = True
 
         if e.type == pygame.KEYUP:
             if e.key == pygame.K_UP and key_lock[0]: 
@@ -42,7 +48,16 @@ while running:
             if e.key == pygame.K_DOWN and key_lock[2]:
                 key_lock[2] = False
             if e.key == pygame.K_LEFT and key_lock[3]:
-                key_lock[3] = False               
+                key_lock[3] = False
+
+        # monster lookhead 
+
+    for et in glb.entity_list:
+        et.check_all_collision()
+
+
+    for et in glb.entity_list:
+        et.take_actions()
 
     screen.fill((0, 0, 0))
     glb.render_all()
