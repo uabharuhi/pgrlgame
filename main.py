@@ -45,7 +45,9 @@ while running:
                 key_lock[3] = False 
 
     for move_obj in glb.movable_list :
-        pass
+        if move_obj == glb.hero:
+            continue
+        move_obj.move()
         #move_obj.move(dx,dy)
     screen.fill((0, 0, 0))
     glb.render_all()

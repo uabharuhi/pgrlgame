@@ -108,7 +108,8 @@ class Movable(Entity):
 
 
 
-
+def Monster(Movable):
+    def __init__(self,pos,etype,speed,direction):
 
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
@@ -129,3 +130,52 @@ class Hero(Movable):
         super().move(dx,dy)
 
 
+import random
+class RandomMoveStragery:
+    #0. if rest_step is 0
+        #1. generate a direction
+        #2. generate a step 1~3 randomly
+    #rest_step --
+
+
+    def __init__(self):
+        self.rest_step = 0
+        self.signal = {}
+        self.dx = 0 
+        self.dy = 0 
+
+    def next_move(self):
+        if "HIT_WALL" in self.signal:
+            self.rest_step = 0
+            self.dx,self.dy = 0,0
+            self.signal.clear()
+            print('hh')
+            return 0,0
+        if self.rest_step > 0 :
+            pass
+        else :
+            self.rest_step = random.randint(1,3)
+            # up,right,down,left ,stop
+            flag = random.randint(0,4)
+            if flag == 0:
+                self.dx = 0
+                self.dy = 0
+                self.rest_step = 1
+            elif flag == 1:
+                self.dx = 0
+                self.dy = -1
+            elif flag == 2:
+                self.dx = 1
+                self.dy = 0
+            elif flag == 3:
+                self.dx = 0
+                self.dy = 1
+            elif flag == 4:
+                self.dx = -1
+                self.dy = 0
+            self.dx,self.dy =  self.dx*glb.W , self.dy*glb.H
+
+        self.rest_step-=1
+        self.signal.clear()
+        #print((self.dx,self.dy))
+        return self.dx,self.dy
