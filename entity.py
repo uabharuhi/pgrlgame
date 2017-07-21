@@ -84,11 +84,6 @@ class Entity:
         #    print(rect_2)
 
         if self.lookahead_rect.colliderect(rect_2) and you.lookahead_rect.colliderect(rect_1):
-            if self == glb.hero and you.etype == glb.ETYPE_MONSTER:
-                print('1234')
-                print(rect_1)
-                print(rect_2)
-                #pygame.
             return True
         return False
 
@@ -188,6 +183,9 @@ class Hero(Movable):
 
     def take_actions(self):
         super().take_actions()
+        if self.hp <= 0:
+            pass
+            #print('game over')
         self.action_dict = {} 
 
     def check_all_collision(self):
@@ -196,8 +194,8 @@ class Hero(Movable):
     def if_monster_collision(self,victim_list):
         for you in victim_list:
             if you.etype == glb.ETYPE_MONSTER:
-                #print('!!')
                 self.action_dict["STOP_MOVE"] = True
+                self.hp-=1
 
 class Monster(Movable):
     def __init__(self,pos,etype,speed,direction,move_strategy):

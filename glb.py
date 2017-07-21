@@ -11,6 +11,7 @@ doors = None
 clock = None
 hero = None
 monster = None
+myfont =  None
 
 current_room = 0
 #monster_init_pos[current_room_id] --> list of pos of monter
@@ -62,13 +63,15 @@ level = [
 
 
 def init_game():
-    global screen,walls,doors,clock
+    global screen,walls,doors,clock,myfont
     pygame.init()
     # Set up the display
     pygame.display.set_caption("test")
     #pygame.key.set_repeat(10,10)
     #                                 width ,height
     screen = pygame.display.set_mode((800, 600))
+    myfont = pygame.font.SysFont("simsunextb",20)
+
 
     clock = pygame.time.Clock()
     walls = [] # List to hold the walls
@@ -90,10 +93,21 @@ def init_game():
             x += W
         y += H
         x = 0
+
+    init_display_area()
     pygame.display.flip()
    
+
+
+def  init_display_area():
+    pass
 
 def render_all():
     for et in entity_list:
         et.render()
+   # print('/wqrqw')
+    hp_text = myfont.render("HP : %d"%(hero.hp),True, (255,255,255))
+    screen.blit(hp_text, (610,0))
+    room_text = myfont.render("ROOM : %d"%(current_room),True, (255,255,255))
+    screen.blit(room_text, (610,30))
     pygame.display.flip()
