@@ -8,17 +8,24 @@ class Entity:
         self.pos = pos
         self.img_list =[]
         self.etype = etype
-        self.rect = pygame.Rect(self.pos[0],self.pos[1],glb.W,glb.H)
+       
+        glb.entity_list.append(self)
 
     def load_imgs(self):
         for i,img_name in enumerate(self.img_list):
             self.img_list[i] = pygame.image.load(img_name)
 
     def render(self,img_idx=0):
-        self.render_rect(self.img_list[img_idx])
+         glb.screen.blit( self.img_list[img_idx ] ,self.get_rect() )
+       
 
-    def render_rect(self,img):
-        glb.screen.blit(img,self.rect)
+    def get_rect(self):
+         rect = pygame.Rect(self.pos[0],self.pos[1],glb.W,glb.H)
+         return rect
+
+    #will call by each other .. only modified self preperty
+    def on_collision(self,you):
+        pass
 
 class Wall(Entity):
     def __init__(self,pos):
@@ -43,32 +50,54 @@ class Movable(Entity):
         self.speed = speed
         self.direction = direction
 
+        glb.movable_list.append(self)
 
-
-    def check_collision(self,next_rect,you):
-        return next_rect.colliderect(you.rect)
-
-    def collide(self,you):
-        pass
+    def get_collision_items(self,next_rect):
+        l = []
+        for et   in  glb.entity_list:
+            if et == self:
+                continue
+            if et.get_rect().colliderect(next_rect):
+                l.append(et)
+        return l
+                
 
     def move(self,dx,dy):
         next_pos = (self.pos[0]+dx,self.pos[1]+dy)
         next_rect =  pygame.Rect(self.pos[0]+dx,self.pos[1]+dy,glb.W,glb.H)
-        #check collide
-            #...
-        if dx > 0 :
-            self.direction = glb.DIRECTION_RIGHT
-        elif dx < 0 :
-            self.direction = glb.DIRECTION_LEFT
-        elif dy > 0 :
-            self.direction = glb.DIRECTION_DOWN
-        elif dy < 0 :
-            self.direction = glb.DIRECTION_UP
-        self.pos = next_pos
-        self.rect = next_rect
+
+        l = self.get_collision_items(next_rect)
+       # print(len(l))
+        actions = {}
+        for you in l:
+            act = self.on_collision(you)
+            if act is not None:
+                actions[act] = True
+
+
+        if "STOP_MOVE" not in actions :
+            if dx > 0 :
+                self.direction = glb.DIRECTION_RIGHT
+            elif dx < 0 :
+                self.direction = glb.DIRECTION_LEFT
+            elif dy > 0 :
+                self.direction = glb.DIRECTION_DOWN
+            elif dy < 0 :
+                self.direction = glb.DIRECTION_UP
+            self.pos = next_pos
+
     
     def render(self):
-        super().render_rect( self.img_list[self.direction] )
+        super().render( self.direction)
+
+    def on_collision(self,you):
+        if you.etype == glb.ETYPE_WALL:
+            return "STOP_MOVE"
+
+        return None
+
+
+
 
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
@@ -84,19 +113,8 @@ class Hero(Movable):
         self.load_imgs() 
 
         glb.hero = self
-
+#colliderect(rect_2) 
     def move(self,dx,dy):
         super().move(dx,dy)
 
-
-    def collide(self,you):
-        if not self.check_collision(you):
-            return None
-        if you.etype == ETYPE_WALL:
-            collide_wall(self,you)
-        if you.etype == ETYPE_DOOR:
-            pass
-
-    def collide_wall(self,wall):
-        pass
 

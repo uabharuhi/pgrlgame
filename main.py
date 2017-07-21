@@ -42,8 +42,11 @@ while running:
             if e.key == pygame.K_DOWN and key_lock[2]:
                 key_lock[2] = False
             if e.key == pygame.K_LEFT and key_lock[3]:
-                key_lock[3] = False               
+                key_lock[3] = False 
 
+    for move_obj in glb.movable_list :
+        pass
+        #move_obj.move(dx,dy)
     screen.fill((0, 0, 0))
     glb.render_all()
   
