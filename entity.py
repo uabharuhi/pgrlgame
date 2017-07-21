@@ -42,7 +42,7 @@ class Door(Entity):
         self.load_imgs() 
         self.room_id = room_id
 
-        glb.doors.append(self)
+        glb.door_list.append(self)
 
 class Movable(Entity):
     def __init__(self,pos,etype,speed,direction):
@@ -86,6 +86,12 @@ class Movable(Entity):
                 self.direction = glb.DIRECTION_UP
             self.pos = next_pos
 
+
+
+
+
+
+
     
     def render(self):
         super().render( self.direction)
@@ -93,8 +99,13 @@ class Movable(Entity):
     def on_collision(self,you):
         if you.etype == glb.ETYPE_WALL:
             return "STOP_MOVE"
-
+        elif you.etype == glb.ETYPE_DOOR:
+            return self. on_door_collision(you)
         return None
+
+    def on_door_collision(self,door):
+        return "STOP_MOVE"
+
 
 
 

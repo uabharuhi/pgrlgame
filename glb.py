@@ -47,7 +47,7 @@ level = [
 
 entity_list = []
 movable_list = []
-
+door_list = []
 
 def init_game():
     global screen,walls,doors,clock
@@ -82,7 +82,6 @@ def init_game():
     #player = Player() # Create the player
 
 def render_all():
-    hero.render()
-    for wall in walls:
-        wall.render()
+    for et in entity_list :
+        et.render()
     pygame.display.flip()
