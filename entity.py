@@ -8,7 +8,7 @@ class Entity:
         self.pos = pos
         self.img_list =[]
         self.etype = etype
-       
+
         glb.entity_list.append(self)
 
     def load_imgs(self):
@@ -17,7 +17,7 @@ class Entity:
 
     def render(self,img_idx=0):
          glb.screen.blit( self.img_list[img_idx ] ,self.get_rect() )
-       
+
 
     def get_rect(self):
          rect = pygame.Rect(self.pos[0],self.pos[1],glb.W,glb.H)
@@ -34,12 +34,12 @@ class Wall(Entity):
         self.load_imgs()
 
         glb.walls.append(self)
-    
+
 class Door(Entity):
     def __init__(self,pos,room_id):
         super().__init__(pos,glb.ETYPE_DOOR)
         self.img_list.append("door.png")
-        self.load_imgs() 
+        self.load_imgs()
         self.room_id = room_id
 
         glb.door_list.append(self)
@@ -60,7 +60,7 @@ class Movable(Entity):
             if et.get_rect().colliderect(next_rect):
                 l.append(et)
         return l
-                
+
 
     def move(self,dx,dy):
         next_pos = (self.pos[0]+dx,self.pos[1]+dy)
@@ -92,7 +92,7 @@ class Movable(Entity):
 
 
 
-    
+
     def render(self):
         super().render( self.direction)
 
@@ -108,8 +108,17 @@ class Movable(Entity):
 
 
 
-def Monster(Movable):
-    def __init__(self,pos,etype,speed,direction):
+class Monster (Movable):
+    def __init__(self,pos,etype,speed,direction, room_id ):
+        super().__init__(pos,etype,speed,direction)
+
+        self.img_list.append("monster_up.png")
+        self.img_list.append("monster_right.png")
+        self.img_list.append("monster_down.png")
+        self.img_list.append("monster_left.png")
+        self.load_imgs()
+
+        glb.monster_list.append(self)
 
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
@@ -122,10 +131,10 @@ class Hero(Movable):
         self.img_list.append("hero_right.png")
         self.img_list.append("hero_down.png")
         self.img_list.append("hero_left.png")
-        self.load_imgs() 
+        self.load_imgs()
 
         glb.hero = self
-#colliderect(rect_2) 
+#colliderect(rect_2)
     def move(self,dx,dy):
         super().move(dx,dy)
 
@@ -141,8 +150,8 @@ class RandomMoveStragery:
     def __init__(self):
         self.rest_step = 0
         self.signal = {}
-        self.dx = 0 
-        self.dy = 0 
+        self.dx = 0
+        self.dy = 0
 
     def next_move(self):
         if "HIT_WALL" in self.signal:

@@ -19,9 +19,9 @@ while running:
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
         #can only allow move on axis
-        if e.type == pygame.KEYDOWN: #and not  press_flag: # for only once  
+        if e.type == pygame.KEYDOWN: #and not  press_flag: # for only once
             if True not in key_lock :
-                if e.key == pygame.K_UP and not key_lock[0]: 
+                if e.key == pygame.K_UP and not key_lock[0]:
                     hero.move(0, -1*hero.speed)
                     key_lock[0] = True
                 if e.key == pygame.K_RIGHT and not key_lock[1]:
@@ -35,21 +35,21 @@ while running:
                     key_lock[3] = True
 
         if e.type == pygame.KEYUP:
-            if e.key == pygame.K_UP and key_lock[0]: 
+            if e.key == pygame.K_UP and key_lock[0]:
                 key_lock[0] = False
             if e.key == pygame.K_RIGHT and  key_lock[1]:
                 key_lock[1] = False
             if e.key == pygame.K_DOWN and key_lock[2]:
                 key_lock[2] = False
             if e.key == pygame.K_LEFT and key_lock[3]:
-                key_lock[3] = False 
+                key_lock[3] = False
 
     for move_obj in glb.movable_list :
         if move_obj == glb.hero:
             continue
-        move_obj.move()
+        move_obj.move(0,0)
         #move_obj.move(dx,dy)
     screen.fill((0, 0, 0))
     glb.render_all()
-  
+
     #print(key)

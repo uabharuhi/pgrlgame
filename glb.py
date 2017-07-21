@@ -12,6 +12,7 @@ H = 20
 ETYPE_WALL = 0
 ETYPE_DOOR = 1
 ETYPE_HERO = 2
+ETYPE_MONSTER = 3
 
 DIRECTION_UP = 0
 DIRECTION_RIGHT = 1
@@ -48,6 +49,7 @@ level = [
 entity_list = []
 movable_list = []
 door_list = []
+monster_list = []
 
 def init_game():
     global screen,walls,doors,clock
@@ -76,10 +78,24 @@ def init_game():
         y += H
         x = 0
 
+
     entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
+    init_monsters()
     pygame.display.flip()
 
     #player = Player() # Create the player
+
+def init_monsters():
+    init_info = [ ((160,100),0)  ]
+
+    for info in init_info:
+        #print(info[0])
+        #print(entity.Monster.__init__)
+        entity.Monster(info[0], ETYPE_MONSTER , W , DIRECTION_LEFT , info[1])
+
+
+
+
 
 def render_all():
     for et in entity_list :
