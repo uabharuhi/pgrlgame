@@ -59,15 +59,22 @@ while running:
     #too lag
     for monster in glb.monster_list:
         monster.lookahead()
-    hero.check_all_collision()
+
+    hero.check_obstacle_collision()
 
     for monster in glb.monster_list:
-        monster.check_all_collision()
+        monster.check_obstacle_collision()
 
+    hero.check_moving_collision()
+    hero.take_actions()
 
-    for et in glb.entity_list:
+    for monster in glb.monster_list:
+        monster.check_moving_collision()
+        monster.take_actions()
 
-        et.take_actions()
+   #for et in glb.entity_list:
+
+        #et.take_actions()
 
     screen.fill((0, 0, 0))
     glb.render_all()

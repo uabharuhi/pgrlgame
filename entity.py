@@ -36,18 +36,23 @@ class Entity:
     def take_actions(self):
         pass
 
-    def check_all_collision(self):
+    def check_obstacle_collision(self):
         victim_list = self.detect_collide_objects()
         self.if_wall_collision(victim_list)
-        self.if_hero_collision(victim_list)
-        self.if_monster_collision(victim_list)
         self.if_door_collision(victim_list)
+        #victim_list = self.detect_collide_objects()
+      
+    def check_moving_collision(self):
+        victim_list = self.detect_collide_objects()
+        self.if_monster_collision(victim_list)
+        self.if_hero_collision(victim_list)
+
         return victim_list
 
     def if_wall_collision(self,victim_list):
         for you in victim_list:
             if you.etype == glb.ETYPE_WALL:
-                self.action_dict["STOP_MOVE"] = True
+                self.lookahead_reset()
 
     def if_hero_collision(self,victim_list):
         pass
@@ -58,8 +63,11 @@ class Entity:
     def if_door_collision(self,victim_list):
         for you in victim_list:
             if you.etype == glb.ETYPE_DOOR:
-                self.action_dict["STOP_MOVE"] = True
-
+                self.lookahead_reset()
+    #for addressing a complex collision problem
+    def lookahead_reset(self):
+        self.lookahead_pos = self.pos
+        self.lookahead_rect = self.rect
     def check_collision(self,you):
         #self x,y,w,h
         self_x1,self_x2 = min(self.pos[0],self.lookahead_pos[0]),max(self.pos[0],self.lookahead_pos[0])
