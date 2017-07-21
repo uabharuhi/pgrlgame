@@ -118,8 +118,12 @@ class Monster (Movable):
         self.img_list.append("monster_left.png")
         self.load_imgs()
 
+        self.move_strategy = RandomMoveStragery()
+
         glb.monster_list.append(self)
 
+    def next_step(self):
+        return self.move_strategy.next_step()
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
         super().__init__(pos,etype,speed,direction)
@@ -149,17 +153,11 @@ class RandomMoveStragery:
 
     def __init__(self):
         self.rest_step = 0
-        self.signal = {}
         self.dx = 0
         self.dy = 0
 
-    def next_move(self):
-        if "HIT_WALL" in self.signal:
-            self.rest_step = 0
-            self.dx,self.dy = 0,0
-            self.signal.clear()
-            print('hh')
-            return 0,0
+    def next_step(self):
+
         if self.rest_step > 0 :
             pass
         else :
@@ -185,6 +183,6 @@ class RandomMoveStragery:
             self.dx,self.dy =  self.dx*glb.W , self.dy*glb.H
 
         self.rest_step-=1
-        self.signal.clear()
+
         #print((self.dx,self.dy))
         return self.dx,self.dy

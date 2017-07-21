@@ -11,7 +11,7 @@ screen = glb.screen
 running = True
 key_lock = [False,False,False,False]
 while running:
-    glb.clock.tick(10)
+    glb.clock.tick(4)
     #pressed = False
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
@@ -47,7 +47,8 @@ while running:
     for move_obj in glb.movable_list :
         if move_obj == glb.hero:
             continue
-        move_obj.move(0,0)
+        dx,dy = move_obj.next_step()
+        move_obj.move(dx,dy)
         #move_obj.move(dx,dy)
     screen.fill((0, 0, 0))
     glb.render_all()
