@@ -18,11 +18,9 @@ class Entity:
     def render(self,img_idx=0):
          glb.screen.blit( self.img_list[img_idx ] ,self.get_rect() )
 
-
     def get_rect(self):
          rect = pygame.Rect(self.pos[0],self.pos[1],glb.W,glb.H)
          return rect
-
     #will call by each other .. only modified self preperty
     def on_collision(self,you):
         pass
@@ -147,12 +145,24 @@ class Hero(Movable):
     def on_monster_collision(self,monster):
         return "STOP_MOVE"
 
+    def on_food_collision(self,monster):
+        return "STOP_MOVE"
+
     def  change_hp(self,delta):
         self.hp += delta
         if self.hp < 0:
             self.hp = 0
         elif self.hp > 10:
             self.hp = 10
+
+class Food(Entity):
+    def __init__(self,pos,room_id):
+        super().__init__(pos,glb.ETYPE_FOOD)
+        self.img_list.append("food.png")
+        self.load_imgs()
+        self.room_id = room_id
+
+        glb.food_list.append(self)
 
 import random
 class RandomMoveStragery:

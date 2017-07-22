@@ -3,8 +3,6 @@ import entity
 import pygame
 
 screen = None
-walls = None
-doors = None
 clock = None
 hero = None
 W = 20
@@ -13,6 +11,7 @@ ETYPE_WALL = 0
 ETYPE_DOOR = 1
 ETYPE_HERO = 2
 ETYPE_MONSTER = 3
+ETYPE_FOOD= 4
 
 DIRECTION_UP = 0
 DIRECTION_RIGHT = 1
@@ -45,11 +44,12 @@ level = [
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
 ]
 
-
+walls = []
 entity_list = []
 movable_list = []
 door_list = []
 monster_list = []
+food_list = []
 
 def init_game():
     global screen,walls,doors,clock
@@ -61,10 +61,6 @@ def init_game():
     screen = pygame.display.set_mode((800, 600))
 
     clock = pygame.time.Clock()
-    walls = [] # List to hold the walls
-    doors = []
-
-
 
     x = y = 0
     for row in level:
@@ -81,16 +77,21 @@ def init_game():
 
     entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
     init_monsters()
+    init_foods()
     pygame.display.flip()
 
     #player = Player() # Create the player
+
+def init_foods():
+    init_info = [ ((20,20),0)  ,((20,160),0) , ((160,20),0) , ((160,160),0) ]
+    for info in init_info:
+        entity.Food(info[0] , info[1])
+
 
 def init_monsters():
     init_info = [ ((160,100),0)  ]
 
     for info in init_info:
-        #print(info[0])
-        #print(entity.Monster.__init__)
         entity.Monster(info[0], ETYPE_MONSTER , W , DIRECTION_LEFT , info[1])
 
 
@@ -98,6 +99,17 @@ def init_monsters():
 
 
 def render_all():
-    for et in entity_list :
-        et.render()
+
+    for wall in walls:
+        wall.render()
+    for door in door_list:
+        door.render()
+    for food in food_list:
+        food.render()
+    hero. render()
+
+    for monster in monster_list:
+        monster.render()
+
+
     pygame.display.flip()
