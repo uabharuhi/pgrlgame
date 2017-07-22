@@ -79,16 +79,16 @@ class Movable(Entity):
             if act is not None:
                 actions[act] = True
 
+        if dx > 0 :
+            self.direction = glb.DIRECTION_RIGHT
+        elif dx < 0 :
+            self.direction = glb.DIRECTION_LEFT
+        elif dy > 0 :
+            self.direction = glb.DIRECTION_DOWN
+        elif dy < 0 :
+            self.direction = glb.DIRECTION_UP
 
         if "STOP_MOVE" not in actions :
-            if dx > 0 :
-                self.direction = glb.DIRECTION_RIGHT
-            elif dx < 0 :
-                self.direction = glb.DIRECTION_LEFT
-            elif dy > 0 :
-                self.direction = glb.DIRECTION_DOWN
-            elif dy < 0 :
-                self.direction = glb.DIRECTION_UP
             self.pos = next_pos
 
         self.move_event_handle()
@@ -135,7 +135,8 @@ class Monster (Movable):
         self.move_strategy = RandomMoveStragery()
 
         glb.monster_list.append(self)
-
+    def on_monster_collision(self,hero):
+        return "STOP_MOVE"
     def on_hero_collision(self,hero):
         hero.change_hp(-1)
         return  "STOP_MOVE"
@@ -150,7 +151,8 @@ class Monster (Movable):
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
         super().__init__(pos,etype,speed,direction)
-        self.hp = 10
+        self.hp = 100
+        self.max_hp =  self.hp
         self.invincible = False
         self.invincible_restround =0
 
@@ -203,7 +205,7 @@ class Hero(Movable):
                 #print(door.room_id)
                 if door.room_id == self.current_room:
                     door.destroy()
-            for monster  in glb.monster_list:
+            for monster  in glb.monster_list[:]:
                 if monster.room_id == self.current_room:
                     monster.dead()
             self.food_pack = []
@@ -229,7 +231,7 @@ class Hero(Movable):
         self.hp += delta
         if self.hp < 0:
             self.hp = 0
-        elif self.hp > 10:
+        elif self.hp > self.max_hp:
             self.hp = 10
 
     def move_event_handle(self):

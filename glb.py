@@ -91,7 +91,7 @@ def init_game():
 
 def init_foods(room_id):
     init_info = [ ((20,20),0)  ,((20,160),0) , ((160,20),0) , ((160,160),0), #0
-                    ((220,20),1)  ,((220,160),1) , ((380,20),1) , ((380,160),1)  #1
+                    ((220,20),1)  ,((220,160),1) , ((360,20),1) , ((360,160),1)  #1
                     ]
     for pos,rid in init_info:
         if  rid == room_id:
@@ -99,7 +99,7 @@ def init_foods(room_id):
 
 
 def init_monsters(room_id):
-    init_info = [ ((160,100),0)  ]
+    init_info = [ ((160,100),0),((360,40),1),((360,140),1)  ]
 
     for pos,rid in init_info:
         if rid == room_id:
