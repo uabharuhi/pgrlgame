@@ -31,22 +31,25 @@ class InfoTextDisplayer:
       self.offset_y = 410
 
     def cls_info(self):
-      for  pos,text in self.info_history:
+      for  history in self.info_history:
+         pos,text = history[0],history[1]
+         print(pos)
+         print(text)
          black = font_renderer.render(text,1,(0,0,0) )
          glb.screen.blit( black , pos)
          self.info_history = []
          self.offset_y = 410
 
     def show_info(self,text,pos=(0,410)):
-      text = font_renderer.render(text,1,(255,255,255) )
-      glb.screen.blit(text,pos)
+      label = font_renderer.render(text,1,(255,255,255) )
+      glb.screen.blit(label,pos)
       self.info_history.append((pos,text))
       self.offset_y+=20
 
     def  info_nextline(self,text):
-      text = font_renderer.render(text,1,(255,255,255) )
+      label = font_renderer.render(text,1,(255,255,255) )
       pos = (0,self.offset_y)
-      glb.screen.blit(text,pos)
+      glb.screen.blit(label,pos)
 
       self.info_history.append((pos,text))
       self.offset_y+=20

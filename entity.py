@@ -1,6 +1,6 @@
 import pygame
 import glb
-
+import display
 
 class Entity:
     #rect for collide and render
@@ -167,6 +167,30 @@ class Hero(Movable):
 
         glb.hero = self
 
+    def goto_next_room(self):
+        display.info_displayer.cls_info()
+
+        display.info_displayer.info_nextline("you can go to next room %d"%(self.current_room+1) )
+        display.info_displayer.info_nextline("Press Enter to continue ..... ")
+        glb.screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
+        glb.render_all()
+
+        # wait until user press enter
+        go = False
+        while not go:
+            events = pygame.event.get()
+            for event in events:
+                if  event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        go = True
+
+
+        #
+
+        self.current_room +=1
+
+        glb.init_foods(self.current_room)
+        glb.init_monsters(self.current_room)
 
 
     def on_door_collision(self,door):
@@ -183,7 +207,9 @@ class Hero(Movable):
                 if monster.room_id == self.current_room:
                     monster.dead()
             self.food_pack = []
-            self.current_room +=1
+
+            self.goto_next_room()
+
 
             return None
 

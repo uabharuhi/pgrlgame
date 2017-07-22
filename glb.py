@@ -78,8 +78,8 @@ def init_game():
         #print(door.room_id)
 
     entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
-    init_monsters()
-    init_foods()
+    init_monsters(0)
+    init_foods(0)
 
     display.info_displayer.show_info("Welcome!")
     display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")
@@ -89,17 +89,21 @@ def init_game():
 
     #player = Player() # Create the player
 
-def init_foods():
-    init_info = [ ((20,20),0)  ,((20,160),0) , ((160,20),0) , ((160,160),0) ]
-    for info in init_info:
-        entity.Food(info[0] , info[1])
+def init_foods(room_id):
+    init_info = [ ((20,20),0)  ,((20,160),0) , ((160,20),0) , ((160,160),0), #0
+                    ((220,20),1)  ,((220,160),1) , ((380,20),1) , ((380,160),1)  #1
+                    ]
+    for pos,rid in init_info:
+        if  rid == room_id:
+            entity.Food(pos ,rid )
 
 
-def init_monsters():
+def init_monsters(room_id):
     init_info = [ ((160,100),0)  ]
 
-    for info in init_info:
-        entity.Monster(info[0], ETYPE_MONSTER , W , DIRECTION_LEFT , info[1])
+    for pos,rid in init_info:
+        if rid == room_id:
+            entity.Monster(pos, ETYPE_MONSTER , W , DIRECTION_LEFT , rid)
 
 def render_all():
 
