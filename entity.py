@@ -84,6 +84,9 @@ class Movable(Entity):
                 self.direction = glb.DIRECTION_UP
             self.pos = next_pos
 
+        self.move_event_handle()
+
+
 
 
     def render(self):
@@ -98,6 +101,8 @@ class Movable(Entity):
             return self. on_monster_collision(you)
         elif you.etype == glb.ETYPE_HERO:
             return self. on_hero_collision(you)
+        elif you.etype == glb.ETYPE_FOOD:
+            return self. on_food_collision(you)
 
     def on_door_collision(self,door):
         return "STOP_MOVE"
@@ -106,6 +111,8 @@ class Movable(Entity):
     def on_hero_collision(self,hero):
         pass
     def on_food_collision(self,food):
+        pass
+    def move_event_handle(self):
         pass
 class Monster (Movable):
     def __init__(self,pos,etype,speed,direction, room_id ):
@@ -139,14 +146,24 @@ class Hero(Movable):
         self.img_list.append("hero_down.png")
         self.img_list.append("hero_left.png")
         self.load_imgs()
+        #events
+        self.monster_attackers = []
+        self.food_pack     = []
+        self.food_new = None
 
         glb.hero = self
 
+
+
+
     def on_monster_collision(self,monster):
+        # hp --
+        if  monster not in self.monster_attackers:
+            self.monster_attackers.append(monster)
         return "STOP_MOVE"
 
-    def on_food_collision(self,monster):
-        return "STOP_MOVE"
+    def on_food_collision(self,food):
+        self.food_new = food
 
     def  change_hp(self,delta):
         self.hp += delta
@@ -154,6 +171,33 @@ class Hero(Movable):
             self.hp = 0
         elif self.hp > 10:
             self.hp = 10
+
+    def move_event_handle(self):
+        #handle hp --
+        attack_times = len(self.monster_attackers)
+        self.hp -= attack_times
+
+        if self.food_new is not None:
+            can_eat_food = True
+            print('eat check')
+            for monster in self.monster_attackers:
+                if monster.get_rect().colliderect(self.food_new.get_rect() ):
+                    can_eat_food = False
+            if can_eat_food:
+                self.food_pack.append(self.food_new)
+                print('eat a new food : food len = %d'%(len(self.food_pack) ) )
+                self.food_new.eaten()
+
+
+        self.monster_attackers = []
+        self.food_new = None
+
+#    def clear_status(self):
+#        self.monster_attackers = []
+#        self.food_eat = []
+#        self.food_new = None
+#
+
 
 class Food(Entity):
     def __init__(self,pos,room_id):
@@ -163,6 +207,10 @@ class Food(Entity):
         self.room_id = room_id
 
         glb.food_list.append(self)
+
+    def eaten(self):
+        glb.food_list.remove(self)
+        glb.entity_list.remove(self)
 
 import random
 class RandomMoveStragery:
