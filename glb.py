@@ -68,12 +68,13 @@ def init_game():
             if col == "W":
                 entity.Wall((x, y))
             if col.isdigit():
-                room_id = int(col)
+                room_id = int(col) -1
                 entity.Door((x,y),room_id)
             x += W
         y += H
         x = 0
-
+    #for door in door_list:
+        #print(door.room_id)
 
     entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
     init_monsters()

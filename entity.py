@@ -38,9 +38,15 @@ class Door(Entity):
         super().__init__(pos,glb.ETYPE_DOOR)
         self.img_list.append("door.png")
         self.load_imgs()
+
         self.room_id = room_id
 
         glb.door_list.append(self)
+
+    def destroy(self):
+        glb.door_list.remove(self)
+        glb.entity_list.remove(self)
+
 
 class Movable(Entity):
     def __init__(self,pos,etype,speed,direction):
@@ -124,6 +130,7 @@ class Monster (Movable):
         self.img_list.append("monster_left.png")
         self.load_imgs()
 
+        self.room_id = room_id
         self.move_strategy = RandomMoveStragery()
 
         glb.monster_list.append(self)
@@ -133,6 +140,10 @@ class Monster (Movable):
 
     def next_step(self):
         return self.move_strategy.next_step()
+
+    def dead(self):
+        glb.monster_list.remove(self)
+        glb.entity_list.remove(self)
 
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
@@ -150,10 +161,31 @@ class Hero(Movable):
         self.monster_attackers = []
         self.food_pack     = []
         self.food_new = None
+        self.current_room = 0
 
         glb.hero = self
 
 
+
+    def on_door_collision(self,door):
+
+        if len(self.food_pack) == 4 :
+            #clear all door of current room
+            for door in glb.door_list[:] :  #copy a list of door list because we delete item from this list
+                                                        #while iterate it
+                #print('door collision')
+                #print(door.room_id)
+                if door.room_id == self.current_room:
+                    door.destroy()
+            for monster  in glb.monster_list:
+                if monster.room_id == self.current_room:
+                    monster.dead()
+            self.food_pack = []
+            self.current_room +=1
+
+            return None
+
+        return "STOP_MOVE"
 
 
     def on_monster_collision(self,monster):
@@ -187,6 +219,7 @@ class Hero(Movable):
                 self.food_pack.append(self.food_new)
                 print('eat a new food : food len = %d'%(len(self.food_pack) ) )
                 self.food_new.eaten()
+
 
 
         self.monster_attackers = []

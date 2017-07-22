@@ -53,4 +53,6 @@ while running:
     screen.fill((0, 0, 0))
     glb.render_all()
 
+    #dl = [ door  for door in glb.door_list if door.room_id == 0 ]
+   # print(len(dl))
     #print(key)
