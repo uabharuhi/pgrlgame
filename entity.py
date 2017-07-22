@@ -88,11 +88,6 @@ class Movable(Entity):
 
 
 
-
-
-
-
-
     def render(self):
         super().render( self.direction)
 
@@ -101,13 +96,19 @@ class Movable(Entity):
             return "STOP_MOVE"
         elif you.etype == glb.ETYPE_DOOR:
             return self. on_door_collision(you)
-        return None
+        elif you.etype == glb.ETYPE_MONSTER:
+            return self. on_monster_collision(you)
+        elif you.etype == glb.ETYPE_HERO:
+            return self. on_hero_collision(you)
 
     def on_door_collision(self,door):
         return "STOP_MOVE"
-
-
-
+    def  on_monster_collision(self,monster):
+        pass
+    def on_hero_collision(self,hero):
+        pass
+    def on_food_collision(self,food):
+        pass
 class Monster (Movable):
     def __init__(self,pos,etype,speed,direction, room_id ):
         super().__init__(pos,etype,speed,direction)
@@ -122,8 +123,12 @@ class Monster (Movable):
 
         glb.monster_list.append(self)
 
+    def on_hero_collision(self,hero):
+        return  "STOP_MOVE"
+
     def next_step(self):
         return self.move_strategy.next_step()
+
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
         super().__init__(pos,etype,speed,direction)
@@ -138,10 +143,16 @@ class Hero(Movable):
         self.load_imgs()
 
         glb.hero = self
-#colliderect(rect_2)
-    def move(self,dx,dy):
-        super().move(dx,dy)
 
+    def on_monster_collision(self,monster):
+        return "STOP_MOVE"
+
+    def  change_hp(self,delta):
+        self.hp += delta
+        if self.hp < 0:
+            self.hp = 0
+        elif self.hp > 10:
+            self.hp = 10
 
 import random
 class RandomMoveStragery:
