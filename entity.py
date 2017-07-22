@@ -1,6 +1,7 @@
 import pygame
 import glb
 
+
 class Entity:
     #rect for collide and render
     #u,r,d,r
@@ -136,6 +137,7 @@ class Monster (Movable):
         glb.monster_list.append(self)
 
     def on_hero_collision(self,hero):
+        hero.change_hp(-1)
         return  "STOP_MOVE"
 
     def next_step(self):
@@ -207,7 +209,7 @@ class Hero(Movable):
     def move_event_handle(self):
         #handle hp --
         attack_times = len(self.monster_attackers)
-        self.hp -= attack_times
+        self.change_hp(-1*attack_times)
 
         if self.food_new is not None:
             can_eat_food = True

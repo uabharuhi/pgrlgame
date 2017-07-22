@@ -1,6 +1,7 @@
 # this file contains all global object
 import entity
 import pygame
+import display
 
 screen = None
 clock = None
@@ -112,5 +113,5 @@ def render_all():
     for monster in monster_list:
         monster.render()
 
-
+    display.state_displayer.show_hero_state()
     pygame.display.flip()
