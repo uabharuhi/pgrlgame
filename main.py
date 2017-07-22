@@ -1,5 +1,5 @@
 import glb
-import entity
+#import entity
 import pygame
 
 glb.init_game()
@@ -50,7 +50,7 @@ while running:
         dx,dy = move_obj.next_step()
         move_obj.move(dx,dy)
         #move_obj.move(dx,dy)
-    screen.fill((0, 0, 0))
+    screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
     glb.render_all()
 
     #dl = [ door  for door in glb.door_list if door.room_id == 0 ]

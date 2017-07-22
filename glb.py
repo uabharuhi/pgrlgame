@@ -80,6 +80,11 @@ def init_game():
     entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
     init_monsters()
     init_foods()
+
+    display.info_displayer.show_info("Welcome!")
+    display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")
+    display.info_displayer.info_nextline("Be careful to monster, hero's hp will decrease if touch by monsters !!")
+
     pygame.display.flip()
 
     #player = Player() # Create the player
@@ -96,10 +101,6 @@ def init_monsters():
     for info in init_info:
         entity.Monster(info[0], ETYPE_MONSTER , W , DIRECTION_LEFT , info[1])
 
-
-
-
-
 def render_all():
 
     for wall in walls:
@@ -114,4 +115,6 @@ def render_all():
         monster.render()
 
     display.state_displayer.show_hero_state()
+
+
     pygame.display.flip()
