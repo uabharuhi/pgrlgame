@@ -3,6 +3,10 @@ import entity
 import pygame
 import display
 
+
+test_mode = True
+test_room = 1
+
 screen = None
 clock = None
 hero = None
@@ -77,9 +81,18 @@ def init_game():
     #for door in door_list:
         #print(door.room_id)
 
-    entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
-    init_monsters(0)
-    init_foods(0)
+    hero = entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
+
+    if test_mode:
+        hero_pos = {0:(40,40),1:(240,40),2:{440,40},3:{440,240},4:{240,240},5:{40,240}}
+        hero.current_room = test_room
+        hero.pos = hero_pos[test_room]
+
+        init_monsters(test_room)
+        init_foods(test_room)
+    else:
+        init_monsters(0)
+        init_foods(0)
 
     display.info_displayer.show_info("Welcome!")
     display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")

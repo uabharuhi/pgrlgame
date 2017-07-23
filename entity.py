@@ -229,8 +229,6 @@ class Hero(Movable):
             self.goto_next_room()
 
 
-            return None
-
         return "STOP_MOVE"
 
 
