@@ -186,20 +186,13 @@ class Hero(Movable):
 
     def goto_next_room(self):
         display.info_displayer.cls_info()
-
         display.info_displayer.info_nextline("you can go to next room %d"%(self.current_room+1) )
         display.info_displayer.info_nextline("Press Enter to continue ..... ")
         glb.screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
         glb.render_all()
 
-        # wait until user press enter
-        go = False
-        while not go:
-            events = pygame.event.get()
-            for event in events:
-                if  event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        go = True
+        self.wait_enter()
+
 
         display.info_displayer.cls_info()
         display.info_displayer.info_nextline("you can move now" )
@@ -243,8 +236,10 @@ class Hero(Movable):
 
     def  change_hp(self,delta):
         self.hp += delta
-        if self.hp < 0:
+        if self.hp <= 0:
             self.hp = 0
+            self.dead()
+
         elif self.hp > self.max_hp:
             self.hp = 10
 
@@ -269,12 +264,31 @@ class Hero(Movable):
         self.monster_attackers = []
         self.food_new = None
 
-#    def clear_status(self):
-#        self.monster_attackers = []
-#        self.food_eat = []
-#        self.food_new = None
-#
+    def dead(self):
+        display.info_displayer.cls_info()
+        display.info_displayer.info_nextline("you dead !!" )
+        display.info_displayer.info_nextline("Hero relives")
+        display.info_displayer.info_nextline("Press Enter to continue ..... ")
+        glb.screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
+        glb.render_all()
+        self.wait_enter()
+        display.info_displayer.cls_info()
+        display.info_displayer.info_nextline("you relives and must go over all rooms again")
+        glb.hero = None
 
+        glb.init_game_entities()
+
+
+
+
+    def wait_enter(self):
+        go = False
+        while not go:
+            events = pygame.event.get()
+            for event in events:
+                if  event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        go = True
 
 class Food(Entity):
     def __init__(self,pos,room_id):

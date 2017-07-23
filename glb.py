@@ -5,7 +5,7 @@ import display
 
 
 test_mode = True
-test_room = 1
+test_room = 0
 
 screen = None
 clock = None
@@ -56,17 +56,15 @@ door_list = []
 monster_list = []
 food_list = []
 
-def init_game():
-    global screen,walls,doors,clock
-    pygame.init()
-    # Set up the display
-    pygame.display.set_caption("test")
-    #pygame.key.set_repeat(10,10)
-    #                                 width ,height
-    screen = pygame.display.set_mode((800, 600))
 
-    clock = pygame.time.Clock()
-
+def init_game_entities():
+    global  walls,entity_list,movable_list,door_list ,monster_list ,food_list
+    walls = []
+    entity_list = []
+    movable_list = []
+    door_list = []
+    monster_list = []
+    food_list = []
     x = y = 0
     for row in level:
         for col in row:
@@ -78,9 +76,33 @@ def init_game():
             x += W
         y += H
         x = 0
-    #for door in door_list:
-        #print(door.room_id)
+    init_hero_and_room()
 
+def init_game(show_info=True):
+    global screen,walls,doors,clock
+
+    pygame.init()
+    # Set up the display
+    pygame.display.set_caption("test")
+    #pygame.key.set_repeat(10,10)
+    #                                 width ,height
+    screen = pygame.display.set_mode((800, 600))
+
+    clock = pygame.time.Clock()
+
+    init_game_entities()
+
+    if show_info:
+        display.info_displayer.show_info("Welcome!")
+        display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")
+        display.info_displayer.info_nextline("Be careful to monster, hero's hp will decrease if touch by monsters !!")
+
+    pygame.display.flip()
+
+    #player = Player() # Create the player
+
+def init_hero_and_room():
+    global hero
     hero = entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
 
     if test_mode:
@@ -94,13 +116,6 @@ def init_game():
         init_monsters(0)
         init_foods(0)
 
-    display.info_displayer.show_info("Welcome!")
-    display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")
-    display.info_displayer.info_nextline("Be careful to monster, hero's hp will decrease if touch by monsters !!")
-
-    pygame.display.flip()
-
-    #player = Player() # Create the player
 
 def init_foods(room_id):
     init_info = [ ((20,20),0)  ,((20,160),0) , ((160,20),0) , ((160,160),0), #0
