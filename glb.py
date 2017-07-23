@@ -5,7 +5,7 @@ import display
 
 
 test_mode = True
-test_room = 4
+test_room = 0
 
 running = True
 screen = None
@@ -27,28 +27,28 @@ DIRECTION_LEFT = 3
 
 level = [
 #123456789012345678901234567890
-"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"W        11        22        W",
+"WWWWWWWWWWWWWWWWWWWW",
+"W                  W",
+"W                  W",
+"W                  W",
+"W                  W",
 #- - -- - - - -- - - - - -
-"W        11        22        W",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"WWWWWWWWWWWWWWWWWWWWWWWW33WWWW",
-"WWWWWWWWWWWWWWWWWWWWWWWW33WWWW",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"W        55        44        W",
+"W                  W",
+"W                  W",
+"W                  W",
+"W                  W",
+"W                  D",
+"W                  D",
+"W                  W",
+"W                  W",
+"W                  W",
+"W                  W",
 #- - -- - - - -- - - - - -
-"W        55        44        W",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"W        WW        WW        W",
-"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+"W                  W",
+"W                  W",
+"W                  W",
+"W                  W",
+"WWWWWWWWWWWWWWWWWWWW"
 ]
 
 walls = []
@@ -57,9 +57,10 @@ movable_list = []
 door_list = []
 monster_list = []
 food_list = []
-goal = None
 
-def init_game_entities():
+
+
+def init_room(room_id):
     global  walls,entity_list,movable_list,door_list ,monster_list ,food_list,goal
     walls = []
     entity_list = []
@@ -67,46 +68,38 @@ def init_game_entities():
     door_list = []
     monster_list = []
     food_list = []
-    goal = None
 
+    init_wall_and_door(room_id)
+
+
+def init_wall_and_door(room_id):
     x = y = 0
     for row in level:
         for col in row:
             if col == "W":
                 entity.Wall((x, y))
-            if col.isdigit():
-                room_id = int(col) -1
+            if col=="D":
                 entity.Door((x,y),room_id)
             x += W
         y += H
         x = 0
-    init_hero_and_room()
 
-    goal = entity.Goal((20,360))
-
-
-def init_game(show_info=True):
+def init_game():
     global screen,walls,doors,clock
 
     pygame.init()
-    # Set up the display
     pygame.display.set_caption("test")
-    #pygame.key.set_repeat(10,10)
-    #                                 width ,height
     screen = pygame.display.set_mode((800, 600))
-
     clock = pygame.time.Clock()
 
-    init_game_entities()
+    if test_mode:
+        init_room(test_room)
 
-    if show_info:
-        display.info_displayer.show_info("Welcome!")
-        display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")
-        display.info_displayer.info_nextline("Be careful to monster, hero's hp will decrease if touch by monsters !!")
+    #display.info_displayer.show_info("Welcome!")
+    #display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")
+    #display.info_displayer.info_nextline("Be careful to monster, hero's hp will decrease if touch by monsters !!")
 
     pygame.display.flip()
-
-    #player = Player() # Create the player
 
 def init_hero_and_room():
     global hero
@@ -160,15 +153,12 @@ def render_all():
         door.render()
     for food in food_list:
         food.render()
-    hero. render()
+    #hero. render()
 
     for monster in monster_list:
         monster.render()
 
-    display.state_displayer.show_hero_state()
-
-    goal.render()
-
+    #display.state_displayer.show_hero_state()
 
     pygame.display.flip()
 

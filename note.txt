@@ -2,3 +2,42 @@
 NO: 依照邏輯碰撞是一個動的撞一個靜止的
 
 如果food和怪物是一起的呢?
+
+
+ver2
+
+有五間房間最後一間是贏的房間 甚麼怪物都沒有,每間房間都長一樣
+玩家可以攻擊
+玩家可以選擇職業 , 職業可以有不同攻擊方式(和大絕)
+怪物有血量,血量會顯示在右邊的資訊
+最多就是N隻怪物(顯示的空間)
+玩家除了要打怪物以外,還有食物可以吃
+每個房間在固定一段時間沒有通過 就會GG
+英雄的移動方式同ver1,每一關的範圍就如同
+(怪物的AI可以增強)
+怪物目前全部都是近戰
+房間的大小是400*400
+房間一段時間就會產生一個food,產生的food不會和英雄的位置重疊
+如果之前沒有吃food會直接讓那個food消失
+
+
+修改地圖
+
+
+init room
+init hero
+hero move
+init monster
+monster move
+hero career
+hero attack: 1 carrer first
+monster dead
+hero dead
+hero attack: 2 carrer
+monster dead
+hero dead
+display info
+goto next room when touch door
+room events : food,debuff,time limits...
+
+hero use skill

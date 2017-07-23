@@ -25,16 +25,16 @@ while glb.running:
         if e.type == pygame.KEYDOWN: #and not  press_flag: # for only once
             if True not in key_lock :
                 if e.key == pygame.K_UP and not key_lock[0]:
-                    glb.hero.move(0, -1*glb.hero.speed)
+                    #glb.hero.move(0, -1*glb.hero.speed)
                     key_lock[0] = True
                 if e.key == pygame.K_RIGHT and not key_lock[1]:
-                    glb.hero.move(glb.hero.speed, 0)
+                   # glb.hero.move(glb.hero.speed, 0)
                     key_lock[1] = True
                 if e.key == pygame.K_DOWN and not key_lock[2]:
-                    glb.hero.move(0,glb.hero.speed)
+                    #glb.hero.move(0,glb.hero.speed)
                     key_lock[2] = True
                 if e.key == pygame.K_LEFT and not key_lock[3]:
-                    glb.hero.move(-1*glb.hero.speed, 0)
+                    #glb.hero.move(-1*glb.hero.speed, 0)
                     key_lock[3] = True
 
         if e.type == pygame.KEYUP:

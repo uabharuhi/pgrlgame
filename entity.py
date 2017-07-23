@@ -183,7 +183,7 @@ class Monster (Movable):
 class Hero(Movable):
     def __init__(self,pos,etype,speed,direction):
         super().__init__(pos,etype,speed,direction)
-        self.hp = 100
+        self.hp = 10
         self.max_hp =  self.hp
         self.invincible = False
         self.invincible_restround =0
