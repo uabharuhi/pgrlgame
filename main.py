@@ -2,21 +2,25 @@ import glb
 #import entity
 import pygame
 
+
+def gg():
+    pygame.quit()
+
 glb.init_game()
 glb.render_all()
 
 screen = glb.screen
 #main loop
-running = True
+
 key_lock = [False,False,False,False]
-while running:
+while glb.running:
     glb.clock.tick(4)
     #pressed = False
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
-            running = False
+            glb.running = False
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
-            running = False
+            glb.running = False
         #can only allow move on axis
         if e.type == pygame.KEYDOWN: #and not  press_flag: # for only once
             if True not in key_lock :
@@ -51,6 +55,9 @@ while running:
         #move_obj.move(dx,dy)
     screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
     glb.render_all()
+
+
+gg()
 
     #dl = [ door  for door in glb.door_list if door.room_id == 0 ]
    # print(len(dl))

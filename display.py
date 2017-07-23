@@ -5,6 +5,23 @@ pygame.font.init()
 default_font = pygame.font.get_default_font()
 font_renderer = pygame.font.Font(default_font, 20)
 
+
+def wait_enter():
+    glb.screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
+
+    info_displayer.info_nextline("Press Enter to continue ..... ")
+    glb.render_all()
+
+    go = False
+    while not go:
+        events = pygame.event.get()
+        for event in events:
+            if  event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    go = True
+
+
+
 class StateTextDisplayer:
     def __init__(self,font_renderer):
       self.font_renderer = font_renderer

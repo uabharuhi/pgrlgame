@@ -26,6 +26,18 @@ class Entity:
     def on_collision(self,you):
         pass
 
+class Goal(Entity):
+     def __init__(self,pos):
+        super().__init__(pos,glb.ETYPE_GOAL)
+        self.img_list.append("goal.png")
+        self.load_imgs()
+
+        glb.goal = self
+
+     def touched(self):
+        glb.win()
+
+
 class Wall(Entity):
     def __init__(self,pos):
         super().__init__(pos,glb.ETYPE_WALL)
@@ -110,6 +122,11 @@ class Movable(Entity):
             return self. on_hero_collision(you)
         elif you.etype == glb.ETYPE_FOOD:
             return self. on_food_collision(you)
+        elif you.etype == glb.ETYPE_GOAL:
+            return self. on_goal_collision(you)
+
+    def on_goal_collision(self,goal):
+        pass
 
     def on_wall_collision(self,wall):
         return  "STOP_MOVE"
@@ -187,11 +204,8 @@ class Hero(Movable):
     def goto_next_room(self):
         display.info_displayer.cls_info()
         display.info_displayer.info_nextline("you can go to next room %d"%(self.current_room+1) )
-        display.info_displayer.info_nextline("Press Enter to continue ..... ")
-        glb.screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
-        glb.render_all()
 
-        self.wait_enter()
+        display.wait_enter()
 
 
         display.info_displayer.cls_info()
@@ -234,6 +248,9 @@ class Hero(Movable):
     def on_food_collision(self,food):
         self.food_new = food
 
+    def on_goal_collision(self,goal):
+        goal.touched()
+
     def  change_hp(self,delta):
         self.hp += delta
         if self.hp <= 0:
@@ -268,27 +285,14 @@ class Hero(Movable):
         display.info_displayer.cls_info()
         display.info_displayer.info_nextline("you dead !!" )
         display.info_displayer.info_nextline("Hero relives")
-        display.info_displayer.info_nextline("Press Enter to continue ..... ")
-        glb.screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
         glb.render_all()
-        self.wait_enter()
+        display.wait_enter()
         display.info_displayer.cls_info()
         display.info_displayer.info_nextline("you relives and must go over all rooms again")
         glb.hero = None
 
         glb.init_game_entities()
 
-
-
-
-    def wait_enter(self):
-        go = False
-        while not go:
-            events = pygame.event.get()
-            for event in events:
-                if  event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        go = True
 
 class Food(Entity):
     def __init__(self,pos,room_id):

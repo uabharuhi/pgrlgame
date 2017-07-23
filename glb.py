@@ -5,8 +5,9 @@ import display
 
 
 test_mode = True
-test_room = 0
+test_room = 4
 
+running = True
 screen = None
 clock = None
 hero = None
@@ -17,6 +18,7 @@ ETYPE_DOOR = 1
 ETYPE_HERO = 2
 ETYPE_MONSTER = 3
 ETYPE_FOOD= 4
+ETYPE_GOAL= 5
 
 DIRECTION_UP = 0
 DIRECTION_RIGHT = 1
@@ -55,16 +57,18 @@ movable_list = []
 door_list = []
 monster_list = []
 food_list = []
-
+goal = None
 
 def init_game_entities():
-    global  walls,entity_list,movable_list,door_list ,monster_list ,food_list
+    global  walls,entity_list,movable_list,door_list ,monster_list ,food_list,goal
     walls = []
     entity_list = []
     movable_list = []
     door_list = []
     monster_list = []
     food_list = []
+    goal = None
+
     x = y = 0
     for row in level:
         for col in row:
@@ -77,6 +81,9 @@ def init_game_entities():
         y += H
         x = 0
     init_hero_and_room()
+
+    goal = entity.Goal((20,360))
+
 
 def init_game(show_info=True):
     global screen,walls,doors,clock
@@ -106,7 +113,7 @@ def init_hero_and_room():
     hero = entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
 
     if test_mode:
-        hero_pos = {0:(40,40),1:(240,40),2:{440,40},3:{440,240},4:{240,240},5:{40,240}}
+        hero_pos = {0:(40,40),1:(240,40),2:(440,40),3:(440,240),4:(240,240),5:(40,240)}
         hero.current_room = test_room
         hero.pos = hero_pos[test_room]
 
@@ -160,5 +167,17 @@ def render_all():
 
     display.state_displayer.show_hero_state()
 
+    goal.render()
+
 
     pygame.display.flip()
+
+def win():
+    global running
+    display.info_displayer.cls_info()
+    display.info_displayer.info_nextline("you win!!!!" )
+    display.wait_enter()
+    running   = False
+
+
+
