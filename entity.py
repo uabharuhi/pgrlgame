@@ -101,7 +101,7 @@ class Movable(Entity):
 
     def on_collision(self,you):
         if you.etype == glb.ETYPE_WALL:
-            return "STOP_MOVE"
+            return self. on_wall_collision(you)
         elif you.etype == glb.ETYPE_DOOR:
             return self. on_door_collision(you)
         elif you.etype == glb.ETYPE_MONSTER:
@@ -111,6 +111,8 @@ class Movable(Entity):
         elif you.etype == glb.ETYPE_FOOD:
             return self. on_food_collision(you)
 
+    def on_wall_collision(self,wall):
+        return  "STOP_MOVE"
     def on_door_collision(self,door):
         return "STOP_MOVE"
     def  on_monster_collision(self,monster):
@@ -135,10 +137,23 @@ class Monster (Movable):
         self.move_strategy = RandomMoveStragery()
 
         glb.monster_list.append(self)
+
     def on_monster_collision(self,hero):
+        self.move_strategy.reset()
         return "STOP_MOVE"
+
     def on_hero_collision(self,hero):
+        self.move_strategy.reset()
         hero.change_hp(-1)
+        return  "STOP_MOVE"
+
+    def on_door_collision(self,door):
+        self.move_strategy.reset()
+        return  "STOP_MOVE"
+
+    def on_wall_collision(self,wall):
+        #print('124')
+        self.move_strategy.reset()
         return  "STOP_MOVE"
 
     def next_step(self):
@@ -186,7 +201,8 @@ class Hero(Movable):
                     if event.key == pygame.K_RETURN:
                         go = True
 
-
+        display.info_displayer.cls_info()
+        display.info_displayer.info_nextline("you can move now" )
         #
 
         self.current_room +=1
@@ -281,13 +297,13 @@ class RandomMoveStragery:
         #1. generate a direction
         #2. generate a step 1~3 randomly
     #rest_step --
-
-
     def __init__(self):
         self.rest_step = 0
         self.dx = 0
         self.dy = 0
 
+    def reset(self):
+        self.rest_step = 0
     def next_step(self):
 
         if self.rest_step > 0 :
