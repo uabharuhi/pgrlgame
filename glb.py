@@ -60,8 +60,8 @@ food_list = []
 
 
 
-def init_room(room_id):
-    global  walls,entity_list,movable_list,door_list ,monster_list ,food_list,goal
+def init_room(room_id,hero_pos=(40,200)):
+    global  walls,entity_list,movable_list,door_list ,monster_list ,food_list
     walls = []
     entity_list = []
     movable_list = []
@@ -70,6 +70,10 @@ def init_room(room_id):
     food_list = []
 
     init_wall_and_door(room_id)
+
+    #set hero pos
+    hero.pos = hero_pos
+
 
 
 def init_wall_and_door(room_id):
@@ -85,15 +89,22 @@ def init_wall_and_door(room_id):
         x = 0
 
 def init_game():
-    global screen,walls,doors,clock
+    global screen,walls,doors,clock,hero
 
     pygame.init()
     pygame.display.set_caption("test")
     screen = pygame.display.set_mode((800, 600))
     clock = pygame.time.Clock()
+    # pos will after set by init_room
+    hero  = entity.Hero((0,0),ETYPE_HERO,W,DIRECTION_RIGHT)
 
     if test_mode:
+        hero.current_room = test_room
+    if test_mode:
         init_room(test_room)
+    else:
+        init_room(0)
+
 
     #display.info_displayer.show_info("Welcome!")
     #display.info_displayer.info_nextline("Move your hero to eat 4 foods at corner in each room")
@@ -153,7 +164,7 @@ def render_all():
         door.render()
     for food in food_list:
         food.render()
-    #hero. render()
+    hero. render()
 
     for monster in monster_list:
         monster.render()
