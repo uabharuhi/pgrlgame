@@ -53,7 +53,7 @@ while glb.running:
         dx,dy = move_obj.next_step()
         move_obj.move(dx,dy)
         #move_obj.move(dx,dy)
-    screen.fill((0, 0, 0),pygame.Rect(0,0,600,400))
+    screen.fill((0, 0, 0),pygame.Rect(0,0,400,400))
     glb.render_all()
 
 

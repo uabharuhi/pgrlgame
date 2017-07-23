@@ -23,20 +23,20 @@ ver2
 
 修改地圖
 
-
-init room
-init hero
-hero move + collision wall/door test
-init monster
-monster move
-hero career
-hero attack: 1 carrer first
-monster dead
-hero dead
-hero attack: 2 carrer
-monster dead
-hero dead
-display info
+only one room
+	init room
+	init hero
+	hero move + collision wall/door test
+	init monster
+	monster move
+	hero career
+	hero attack: 1 carrer first
+	monster dead
+	hero dead
+	hero attack: 2 carrer
+	monster dead
+	hero dead
+	display info
 goto next room when touch door
 room events : food,debuff,time limits...
 

@@ -162,6 +162,7 @@ class Monster (Movable):
     def on_hero_collision(self,hero):
         self.move_strategy.reset()
         hero.change_hp(-1)
+        print(glb.hero.hp)
         return  "STOP_MOVE"
 
     def on_door_collision(self,door):
@@ -181,9 +182,10 @@ class Monster (Movable):
         glb.entity_list.remove(self)
 
 class Hero(Movable):
-    def __init__(self,pos,etype,speed,direction):
+    def __init__(self,pos,speed,direction):
+        etype = glb.ETYPE_HERO
         super().__init__(pos,etype,speed,direction)
-        self.hp = 10
+        self.hp = 1000
         self.max_hp =  self.hp
         self.invincible = False
         self.invincible_restround =0
@@ -349,4 +351,5 @@ class RandomMoveStragery:
         self.rest_step-=1
 
         #print((self.dx,self.dy))
+
         return self.dx,self.dy

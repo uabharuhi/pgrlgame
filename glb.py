@@ -52,7 +52,7 @@ level = [
 ]
 
 walls = []
-entity_list = []
+entity_list = [] #for collision check
 movable_list = []
 door_list = []
 monster_list = []
@@ -61,19 +61,18 @@ food_list = []
 
 
 def init_room(room_id,hero_pos=(40,200)):
-    global  walls,entity_list,movable_list,door_list ,monster_list ,food_list
+    global  walls,movable_list,door_list ,monster_list ,food_list
+
     walls = []
-    entity_list = []
-    movable_list = []
     door_list = []
     monster_list = []
     food_list = []
 
     init_wall_and_door(room_id)
 
-    #set hero pos
     hero.pos = hero_pos
 
+    init_monsters(room_id)
 
 
 def init_wall_and_door(room_id):
@@ -96,7 +95,7 @@ def init_game():
     screen = pygame.display.set_mode((800, 600))
     clock = pygame.time.Clock()
     # pos will after set by init_room
-    hero  = entity.Hero((0,0),ETYPE_HERO,W,DIRECTION_RIGHT)
+    hero  = entity.Hero((0,0),W,DIRECTION_RIGHT)
 
     if test_mode:
         hero.current_room = test_room
@@ -112,21 +111,21 @@ def init_game():
 
     pygame.display.flip()
 
-def init_hero_and_room():
-    global hero
-    hero = entity.Hero((40,40),ETYPE_HERO,W,DIRECTION_RIGHT)
-
-    if test_mode:
-        hero_pos = {0:(40,40),1:(240,40),2:(440,40),3:(440,240),4:(240,240),5:(40,240)}
-        hero.current_room = test_room
-        hero.pos = hero_pos[test_room]
-
-        init_monsters(test_room)
-        init_foods(test_room)
-    else:
-        init_monsters(0)
-        init_foods(0)
-
+#def init_hero_and_room():
+#    global hero
+#    hero = entity.Hero((40,40),W,DIRECTION_RIGHT)
+#
+#    if test_mode:
+#        hero_pos = {0:(40,40),1:(240,40),2:(440,40),3:(440,240),4:(240,240),5:(40,240)}
+#        hero.current_room = test_room
+#        hero.pos = hero_pos[test_room]
+#
+#        init_monsters(test_room)
+#        init_foods(test_room)
+#    else:
+#        init_monsters(0)
+#        init_foods(0)
+#
 
 def init_foods(room_id):
     init_info = [ ((20,20),0)  ,((20,160),0) , ((160,20),0) , ((160,160),0), #0
@@ -143,13 +142,10 @@ def init_foods(room_id):
 
 
 def init_monsters(room_id):
-    init_info = [ ((160,100),0),
-                     ((360,40),1),((360,140),1),
+    init_info = [ ((360 ,40),0),((360,120),0),((360,200),0),((360,280),0),((280,40),1),((280,120),1),
                      ((560,40),2),((560,140),2),((420,40),2) ,
                      ((560,240),3),((560,340),3),((420,240),3) ,
-                     ((360,240),4),((360,340),4),((220,240),4) ,
-                    # ((160,240),5),((160,340),5),((20,240),5)
-
+                     ((360,240),4),((360,340),4),((220,240),4)
      ]
 
     for pos,rid in init_info:
