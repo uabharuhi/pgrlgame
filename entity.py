@@ -318,7 +318,12 @@ class SwordAttack(Entity):
     def render(self):
        # print('1234')
         super().render( self.direction)
-
+    def get_rect(self):
+        if self.direction == glb.DIRECTION_DOWN or self.direction == glb.DIRECTION_UP:
+            rect = pygame.Rect(self.pos[0],self.pos[1],glb.W,3*glb.H)
+        else:
+            rect = pygame.Rect(self.pos[0],self.pos[1],3*glb.W,glb.H)
+        return rect
     def destroy(self):
         glb.entity_list.remove(self)
 
@@ -347,10 +352,10 @@ class Kirito(Hero):
             elapsed_count = 3
             #                   up,right,down  
             rect = self.get_rect()
-            rect1 = rect.move(0,-1*glb.H)
+            rect1 = rect.move(0,-3*glb.H)
             rect2 = rect.move(glb.W,0)
             rect3 = rect.move(0,1*glb.H)
-            rect4 = rect.move(-1*glb.W,0)
+            rect4 = rect.move(-3*glb.W,0)
             attack_order_list = [rect1,rect2,rect3,rect4]
             attack_idx = self.direction-1
 
@@ -358,6 +363,7 @@ class Kirito(Hero):
                 attack_idx = 3
             #start of idx
             sword = None
+            
             while elapsed_count>0:
                 glb.clock.tick(20)
 
@@ -382,6 +388,8 @@ class Kirito(Hero):
 
             print('ccdd')
             glb.clock.tick(4) 
+            glb.screen.fill((0, 0, 0),pygame.Rect(0,0,400,400))
+            glb.render_all()
             self.current_cd =  self.attack_cd  
             #glb.clock.tick(10)
             #glb.clock.tick(10) 
