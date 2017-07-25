@@ -352,7 +352,9 @@ class Kirito(Hero):
             #start of idx
             sword = None
             while elapsed_count>0:
-                glb.clock.tick(4)
+                glb.clock.tick(20)
+                for e in pygame.event.get():
+                    pass
                # pygame.time.delay(2500)
                 #if sword is not None:
                     #sword.destroy()
@@ -362,8 +364,11 @@ class Kirito(Hero):
                 sword.fire()
                 elapsed_count-=1
                 print('s %d'%sword.direction)
+                glb.screen.fill((0, 0, 0),pygame.Rect(0,0,400,400))
                 sword.render()
-                pygame.display.flip()
+                glb.render_all()
+                
+               #pygame.display.flip()
 
                 attack_idx+=1
                 if attack_idx>3:
