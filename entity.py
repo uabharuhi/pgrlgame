@@ -26,6 +26,15 @@ class Entity:
     def on_collision(self,you):
         pass
 
+    def get_collision_items(self,next_rect):
+        l = []
+        for et   in  glb.entity_list:
+            if et == self:
+                continue
+            if et.get_rect().colliderect(next_rect):
+                l.append(et)
+        return l
+
 class Goal(Entity):
      def __init__(self,pos):
         super().__init__(pos,glb.ETYPE_GOAL)
@@ -69,14 +78,6 @@ class Movable(Entity):
 
         glb.movable_list.append(self)
 
-    def get_collision_items(self,next_rect):
-        l = []
-        for et   in  glb.entity_list:
-            if et == self:
-                continue
-            if et.get_rect().colliderect(next_rect):
-                l.append(et)
-        return l
 
 
     def move(self,dx,dy):
@@ -295,11 +296,86 @@ class Hero(Movable):
 
         glb.init_game_entities()
 
+
+
+class SwordAttack(Entity):
+    def __init__(self,pos,direction,attacker):
+        super().__init__(pos,glb.ETYPE_ATTACK)
+        self.img_list.append("sword_up.png")
+        self.img_list.append("sword_right.png")
+        self.img_list.append("sword_down.png")
+        self.img_list.append("sword_left.png")
+        self.load_imgs()
+        self.direction = direction
+        self.attacker = attacker
+
+    def fire(self):
+        l = self.get_collision_items(self.get_rect())
+        for e in l:
+            if e.etype == glb.ETYPE_MONSTER:
+                self.attacker.hp+=1
+
+    def render(self):
+       # print('1234')
+        super().render( self.direction)
+
+    def destroy(self):
+        glb.entity_list.remove(self)
+
+        #if self.rest_round == 0:
+        #    self.attacker. is_attacking =False
+        #else:
+        #    self.attacker.is_attacking = True
+
+
+
+
 class Kirito(Hero):
         def __init__(self,pos,speed,direction):
             super().__init__(pos,speed,direction)
+            self.attack_obj = None
+            self.attack_cd = 12
+            self.hp = 10
         def attack(self):
-            print('start burst stream')
+
+            elapsed_count = 3
+            #                   up,right,down  
+            rect = self.get_rect()
+            rect1 = rect.move(0,-1*glb.H)
+            rect2 = rect.move(glb.W,0)
+            rect3 = rect.move(0,1*glb.H)
+            rect4 = rect.move(-1*glb.W,0)
+            attack_order_list = [rect1,rect2,rect3,rect4]
+            attack_idx = self.direction-1
+            if attack_idx<0:
+                attack_idx = 3
+            #start of idx
+            sword = None
+            while elapsed_count>0:
+                glb.clock.tick(4)
+               # pygame.time.delay(2500)
+                #if sword is not None:
+                    #sword.destroy()
+                #print(attack_idx)
+                next_rect = attack_order_list[attack_idx]
+                sword = SwordAttack((next_rect.x,next_rect.y),attack_idx,self)
+                sword.fire()
+                elapsed_count-=1
+                print('s %d'%sword.direction)
+                sword.render()
+                pygame.display.flip()
+
+                attack_idx+=1
+                if attack_idx>3:
+                    attack_idx = 0
+
+            print('ccdd')
+            glb.clock.tick(4)    
+            #glb.clock.tick(10)
+            #glb.clock.tick(10) 
+                 
+
+
 
 class Megumi(Hero):
         def __init__(self,pos,speed,direction):

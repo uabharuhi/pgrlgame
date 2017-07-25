@@ -13,6 +13,7 @@ screen = glb.screen
 #main loop
 
 key_lock = [False,False,False,False]
+
 while glb.running:
     glb.clock.tick(4)
     #pressed = False

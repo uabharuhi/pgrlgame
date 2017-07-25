@@ -19,6 +19,7 @@ ETYPE_HERO = 2
 ETYPE_MONSTER = 3
 ETYPE_FOOD= 4
 ETYPE_GOAL= 5
+ETYPE_ATTACK = 6
 
 DIRECTION_UP = 0
 DIRECTION_RIGHT = 1
@@ -77,7 +78,7 @@ def init_room(room_id,hero_pos=(40,200)):
 
 def  init_hero():
     global hero
-    career = "wizard"
+    career = "warrior"
     #career = "wizard"
     if career == "warrior":
         hero = entity.Kirito((0,0),W,DIRECTION_RIGHT)
@@ -175,8 +176,8 @@ def render_all():
 
     for monster in monster_list:
         monster.render()
-
-    #display.state_displayer.show_hero_state()
+   # display.state_displayer.show_hero_state()
+    display.state_displayer.show_hero_state()
 
     pygame.display.flip()
 
