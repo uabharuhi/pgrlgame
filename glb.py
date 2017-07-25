@@ -75,6 +75,18 @@ def init_room(room_id,hero_pos=(40,200)):
     init_monsters(room_id)
 
 
+def  init_hero():
+    global hero
+    career = "wizard"
+    #career = "wizard"
+    if career == "warrior":
+        hero = entity.Kirito((0,0),W,DIRECTION_RIGHT)
+    elif career=="wizard":
+        hero = entity.Megumi((0,0),W,DIRECTION_RIGHT)
+    else:
+        assert False
+
+
 def init_wall_and_door(room_id):
     x = y = 0
     for row in level:
@@ -95,8 +107,7 @@ def init_game():
     screen = pygame.display.set_mode((800, 600))
     clock = pygame.time.Clock()
     # pos will after set by init_room
-    hero  = entity.Hero((0,0),W,DIRECTION_RIGHT)
-
+    init_hero()
     if test_mode:
         hero.current_room = test_room
     if test_mode:

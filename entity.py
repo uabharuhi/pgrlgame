@@ -295,6 +295,17 @@ class Hero(Movable):
 
         glb.init_game_entities()
 
+class Kirito(Hero):
+        def __init__(self,pos,speed,direction):
+            super().__init__(pos,speed,direction)
+        def attack(self):
+            print('start burst stream')
+
+class Megumi(Hero):
+        def __init__(self,pos,speed,direction):
+            super().__init__(pos,speed,direction)
+        def attack(self):
+            print('explosion')
 
 class Food(Entity):
     def __init__(self,pos,room_id):

@@ -36,7 +36,8 @@ while glb.running:
                 if e.key == pygame.K_LEFT and not key_lock[3]:
                     glb.hero.move(-1*glb.hero.speed, 0)
                     key_lock[3] = True
-
+                if e.key == pygame.K_a :
+                    glb.hero.attack()
         if e.type == pygame.KEYUP:
             if e.key == pygame.K_UP and key_lock[0]:
                 key_lock[0] = False
