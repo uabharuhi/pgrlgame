@@ -209,6 +209,8 @@ class Hero(Movable):
         self.food_new = None
         self.current_room = 0
 
+        self.current_cd = 0
+
         glb.hero = self
 
     def goto_next_room(self):
@@ -304,6 +306,9 @@ class Hero(Movable):
         glb.init_game_entities()
 
 
+    def decrease_cd(self):
+        if self.current_cd>0:
+            self.current_cd-=1   
 
 class SwordAttack(Entity):
     def __init__(self,pos,direction,attacker):
@@ -349,11 +354,8 @@ class Kirito(Hero):
             super().__init__(pos,speed,direction)
             self.attack_obj = None
             self.attack_cd = 4
-            self.current_cd = 0
             self.hp = 10
-        def decrease_cd(self):
-            if self.current_cd>0:
-                self.current_cd-=1   
+
         def attack(self):
             if  self.current_cd > 0 :
                 return
@@ -403,6 +405,14 @@ class Kirito(Hero):
             #glb.clock.tick(10)
             #glb.clock.tick(10) 
                  
+class Explosion(Entity):
+    def in_boundary(self):
+        x,y = pos[0],pos[1]
+        if x >= 380 or y>380 or y<20 or x<20 :
+            return False
+        
+
+
 
 
 
@@ -410,7 +420,22 @@ class Megumi(Hero):
         def __init__(self,pos,speed,direction):
             super().__init__(pos,speed,direction)
         def attack(self):
-            print('explosion')
+            pass
+
+
+        def create_explosions(self):
+            w,h = glb.W,glb.H
+            if self.direction == glb.DIRECTION_UP:
+                pos_list = [(self.x,self.y-h),(self.x-w,self.y-h),(self.x+w,self.y-h),(self.x,self.y-2*h)] 
+            elif self.direction == glb.DIRECTION_RIGHT:
+                pos_list = [(self.x+w,self.y),(self.x+2*w,self.y),(self.x+w,self.y-h),(self.x+w,self.y+h)] 
+            elif self.direction == glb.DIRECTION_DOWN:
+                pos_list = [(self.x,self.y+h),(self.x-w,self.y+h),(self.x+w,self.y+h),(self.x,self.y+2*h)] 
+            elif self.direction == glb.DIRECTION_LEFT:
+                pos_list = [(self.x-w,self.y),(self.x-2*w,self.y),(self.x-w,self.y-h),(self.x-w,self.y+h)]
+            ex_list = []
+
+           
 
 class Food(Entity):
     def __init__(self,pos,room_id):
