@@ -334,9 +334,15 @@ class Kirito(Hero):
         def __init__(self,pos,speed,direction):
             super().__init__(pos,speed,direction)
             self.attack_obj = None
-            self.attack_cd = 12
+            self.attack_cd = 6
+            self.current_cd = 0
             self.hp = 10
+        def decrease_cd(self):
+            if self.current_cd>0:
+                self.current_cd-=1   
         def attack(self):
+            if  self.current_cd > 0 :
+                return
 
             elapsed_count = 3
             #                   up,right,down  
@@ -347,14 +353,14 @@ class Kirito(Hero):
             rect4 = rect.move(-1*glb.W,0)
             attack_order_list = [rect1,rect2,rect3,rect4]
             attack_idx = self.direction-1
+
             if attack_idx<0:
                 attack_idx = 3
             #start of idx
             sword = None
             while elapsed_count>0:
                 glb.clock.tick(20)
-                for e in pygame.event.get():
-                    pass
+
                # pygame.time.delay(2500)
                 #if sword is not None:
                     #sword.destroy()
@@ -375,7 +381,8 @@ class Kirito(Hero):
                     attack_idx = 0
 
             print('ccdd')
-            glb.clock.tick(4)    
+            glb.clock.tick(4) 
+            self.current_cd =  self.attack_cd  
             #glb.clock.tick(10)
             #glb.clock.tick(10) 
                  

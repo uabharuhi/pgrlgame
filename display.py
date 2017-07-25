@@ -37,6 +37,9 @@ class StateTextDisplayer:
       text = font_renderer.render('ROOM %d'%( glb.hero.current_room ),1,(255,255,255) )
       glb.screen.blit( text ,  (610,30))
 
+      text = font_renderer.render('CD %d'%( glb.hero.current_cd ),1,(255,255,255) )
+      glb.screen.blit( text ,  (610,50))
+
 
 
 

@@ -11,11 +11,13 @@ glb.render_all()
 
 screen = glb.screen
 #main loop
-
+move_contraint = False #only can move once in one tick
 key_lock = [False,False,False,False]
 
 while glb.running:
     glb.clock.tick(4)
+    move_contraint = False
+    glb.hero.decrease_cd()
     #pressed = False
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
@@ -26,19 +28,28 @@ while glb.running:
         if e.type == pygame.KEYDOWN: #and not  press_flag: # for only once
             if True not in key_lock :
                 if e.key == pygame.K_UP and not key_lock[0]:
-                    glb.hero.move(0, -1*glb.hero.speed)
+                    if not move_contraint:
+                            glb.hero.move(0, -1*glb.hero.speed)
+                            move_contraint = True
                     key_lock[0] = True
                 if e.key == pygame.K_RIGHT and not key_lock[1]:
-                   glb.hero.move(glb.hero.speed, 0)
-                   key_lock[1] = True
+                    if not move_contraint:
+                            glb.hero.move(glb.hero.speed,0)
+                            move_contraint = True
+                    key_lock[1] = True
                 if e.key == pygame.K_DOWN and not key_lock[2]:
-                    glb.hero.move(0,glb.hero.speed)
+                    if not move_contraint:
+                            glb.hero.move(0,glb.hero.speed)
+                            move_contraint = True
                     key_lock[2] = True
                 if e.key == pygame.K_LEFT and not key_lock[3]:
-                    glb.hero.move(-1*glb.hero.speed, 0)
+                    if not move_contraint:
+                            glb.hero.move(-1*glb.hero.speed, 0)
+                            move_contraint = True
                     key_lock[3] = True
-                if e.key == pygame.K_a :
-                    glb.hero.attack()
+            #attack can using when press other button
+            if e.key == pygame.K_a :
+                glb.hero.attack()
         if e.type == pygame.KEYUP:
             if e.key == pygame.K_UP and key_lock[0]:
                 key_lock[0] = False
