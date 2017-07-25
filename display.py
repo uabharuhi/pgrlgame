@@ -40,6 +40,15 @@ class StateTextDisplayer:
       text = font_renderer.render('CD %d'%( glb.hero.current_cd ),1,(255,255,255) )
       glb.screen.blit( text ,  (610,50))
 
+    def show_monsters_state(self):
+      start_y = 70
+      for monster in glb.monster_list:
+          text = font_renderer.render('Monster HP %d'%(monster.hp),1,(255,255,255))
+          glb.screen.blit( text ,  (610,start_y))
+
+          start_y+=20
+      
+
 
 
 

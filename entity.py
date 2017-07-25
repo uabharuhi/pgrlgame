@@ -151,10 +151,17 @@ class Monster (Movable):
         self.img_list.append("monster_left.png")
         self.load_imgs()
 
+        self.hp = 12
         self.room_id = room_id
         self.move_strategy = RandomMoveStragery()
 
         glb.monster_list.append(self)
+
+    def decrease_hp(self,n):
+        if self.hp>0:
+            self.hp-=n
+        if self.hp<0:
+            self.hp = 0
 
     def on_monster_collision(self,hero):
         self.move_strategy.reset()
@@ -308,12 +315,14 @@ class SwordAttack(Entity):
         self.load_imgs()
         self.direction = direction
         self.attacker = attacker
+        self.damage = 3
 
     def fire(self):
         l = self.get_collision_items(self.get_rect())
         for e in l:
             if e.etype == glb.ETYPE_MONSTER:
                 self.attacker.hp+=1
+                e.decrease_hp(self.damage)
 
     def render(self):
        # print('1234')
@@ -339,7 +348,7 @@ class Kirito(Hero):
         def __init__(self,pos,speed,direction):
             super().__init__(pos,speed,direction)
             self.attack_obj = None
-            self.attack_cd = 6
+            self.attack_cd = 4
             self.current_cd = 0
             self.hp = 10
         def decrease_cd(self):

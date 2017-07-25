@@ -178,6 +178,7 @@ def render_all():
         monster.render()
    # display.state_displayer.show_hero_state()
     display.state_displayer.show_hero_state()
+    display.state_displayer.show_monsters_state()
 
     pygame.display.flip()
 
