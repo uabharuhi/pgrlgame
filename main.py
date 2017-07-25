@@ -60,7 +60,7 @@ while glb.running:
             if e.key == pygame.K_LEFT and key_lock[3]:
                 key_lock[3] = False
 
-    for move_obj in glb.movable_list :
+    for move_obj in glb.movable_list[:] :
         if move_obj == glb.hero:
             continue
         dx,dy = move_obj.next_step()

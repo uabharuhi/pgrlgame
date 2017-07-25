@@ -141,6 +141,7 @@ class Movable(Entity):
         pass
     def move_event_handle(self):
         pass
+
 class Monster (Movable):
     def __init__(self,pos,etype,speed,direction, room_id ):
         super().__init__(pos,etype,speed,direction)
@@ -308,7 +309,7 @@ class Hero(Movable):
 
     def decrease_cd(self):
         if self.current_cd>0:
-            self.current_cd-=1   
+            self.current_cd-=1
 
 class SwordAttack(Entity):
     def __init__(self,pos,direction,attacker):
@@ -347,8 +348,6 @@ class SwordAttack(Entity):
         #    self.attacker.is_attacking = True
 
 
-
-
 class Kirito(Hero):
         def __init__(self,pos,speed,direction):
             super().__init__(pos,speed,direction)
@@ -361,7 +360,7 @@ class Kirito(Hero):
                 return
 
             elapsed_count = 3
-            #                   up,right,down  
+            #                   up,right,down
             rect = self.get_rect()
             rect1 = rect.move(0,-3*glb.H)
             rect2 = rect.move(glb.W,0)
@@ -374,7 +373,7 @@ class Kirito(Hero):
                 attack_idx = 3
             #start of idx
             sword = None
-            
+
             while elapsed_count>0:
                 glb.clock.tick(20)
 
@@ -390,7 +389,7 @@ class Kirito(Hero):
                 glb.screen.fill((0, 0, 0),pygame.Rect(0,0,400,400))
                 sword.render()
                 glb.render_all()
-                
+
                #pygame.display.flip()
 
                 attack_idx+=1
@@ -398,44 +397,102 @@ class Kirito(Hero):
                     attack_idx = 0
 
             print('ccdd')
-            glb.clock.tick(4) 
+            glb.clock.tick(4)
             glb.screen.fill((0, 0, 0),pygame.Rect(0,0,400,400))
             glb.render_all()
-            self.current_cd =  self.attack_cd  
+            self.current_cd =  self.attack_cd
             #glb.clock.tick(10)
-            #glb.clock.tick(10) 
-                 
-class Explosion(Entity):
+            #glb.clock.tick(10)
+
+class Explosion(Movable):
+
+    def __init__(self,pos,speed,direction):
+         super().__init__(pos,glb.ETYPE_ATTACK,speed,direction)
+         glb.attack_list.append(self)
+
+         if not self.in_boundary():
+            self.destroy()
+            #print('aa')
+         self.img_list.append("explosion.png")
+         self.img_list.append("explosion.png")
+         self.img_list.append("explosion.png")
+         self.img_list.append("explosion.png")
+         self.load_imgs()
+
+         self.time = 4
+
+
+    def move(self,dx,dy):
+        next_pos = (self.pos[0]+dx,self.pos[1]+dy)
+        next_rect =  pygame.Rect(self.pos[0]+dx,self.pos[1]+dy,glb.W,glb.H)
+
+
+        l = self.get_collision_items(next_rect)
+        for you in l:
+            self.on_collision(you)
+        self.pos = next_pos
+        self.time-=1
+        if not self.in_boundary() or self.time<=0:
+            self.destroy()
+
+
     def in_boundary(self):
-        x,y = pos[0],pos[1]
-        if x >= 380 or y>380 or y<20 or x<20 :
+        x,y = self.pos[0],self.pos[1]
+        if x > 380 or y>380 or y<20 or x<20 :
             return False
-        
+        return True
+    def next_step(self):
+        dx,dy = 0,0
+        if self.direction == glb.DIRECTION_UP:
+            dy = -1*glb.H
+        elif self.direction == glb.DIRECTION_RIGHT:
+            dx =  glb.W
+        elif self.direction == glb.DIRECTION_DOWN:
+            dy = glb.H
+        elif self.direction == glb.DIRECTION_LEFT:
+            dx =  -1*glb.W
+        return dx,dy
+
+    def on_monster_collision(self,you):
+        self.destroy()
+        pass
+        #self.de
+
+    def destroy(self):
+        glb.movable_list.remove(self)
+        glb.entity_list.remove(self)
+        glb.attack_list.remove(self)
+
 
 
 
 
 
 class Megumi(Hero):
-        def __init__(self,pos,speed,direction):
-            super().__init__(pos,speed,direction)
+
         def attack(self):
-            pass
+            self.create_explosions()
 
 
         def create_explosions(self):
             w,h = glb.W,glb.H
+            x,y = self.pos[0],self.pos[1]
             if self.direction == glb.DIRECTION_UP:
-                pos_list = [(self.x,self.y-h),(self.x-w,self.y-h),(self.x+w,self.y-h),(self.x,self.y-2*h)] 
+                pos_list = [(x,y-h),(x-w,y-h),(x+w,y-h),(x,y-2*h)]
             elif self.direction == glb.DIRECTION_RIGHT:
-                pos_list = [(self.x+w,self.y),(self.x+2*w,self.y),(self.x+w,self.y-h),(self.x+w,self.y+h)] 
+                pos_list = [(x+w,y),(x+2*w,y),(x+w,y-h),(x+w,y+h)]
             elif self.direction == glb.DIRECTION_DOWN:
-                pos_list = [(self.x,self.y+h),(self.x-w,self.y+h),(self.x+w,self.y+h),(self.x,self.y+2*h)] 
+                pos_list = [(x,y+h),(x-w,y+h),(x+w,y+h),(x,y+2*h)]
             elif self.direction == glb.DIRECTION_LEFT:
-                pos_list = [(self.x-w,self.y),(self.x-2*w,self.y),(self.x-w,self.y-h),(self.x-w,self.y+h)]
+                pos_list = [(x-w,y),(x-2*w,y),(x-w,y-h),(x-w,y+h)]
             ex_list = []
+            for pos in pos_list:
 
-           
+                ex = Explosion(pos,glb.W,self.direction)
+                ex_list.append(ex)
+
+
+
 
 class Food(Entity):
     def __init__(self,pos,room_id):

@@ -58,6 +58,7 @@ movable_list = []
 door_list = []
 monster_list = []
 food_list = []
+attack_list = []
 
 
 
@@ -78,8 +79,8 @@ def init_room(room_id,hero_pos=(40,200)):
 
 def  init_hero():
     global hero
-    career = "warrior"
-    #career = "wizard"
+    #career = "warrior"
+    career = "wizard"
     if career == "warrior":
         hero = entity.Kirito((0,0),W,DIRECTION_RIGHT)
     elif career=="wizard":
@@ -176,6 +177,8 @@ def render_all():
 
     for monster in monster_list:
         monster.render()
+    for attack in attack_list:
+        attack.render()
    # display.state_displayer.show_hero_state()
     display.state_displayer.show_hero_state()
     display.state_displayer.show_monsters_state()
