@@ -189,6 +189,7 @@ class Monster (Movable):
         return self.move_strategy.next_step()
 
     def dead(self):
+        glb.movable_list.remove(self)
         glb.monster_list.remove(self)
         glb.entity_list.remove(self)
 
@@ -196,7 +197,7 @@ class Hero(Movable):
     def __init__(self,pos,speed,direction):
         etype = glb.ETYPE_HERO
         super().__init__(pos,etype,speed,direction)
-        self.hp = 1000
+        self.hp = 3
         self.max_hp =  self.hp
         self.invincible = False
         self.invincible_restround =0
@@ -246,6 +247,7 @@ class Hero(Movable):
 
 
         return "STOP_MOVE"
+      
 
 
     def on_monster_collision(self,monster):
@@ -269,26 +271,26 @@ class Hero(Movable):
         elif self.hp > self.max_hp:
             self.hp = 10
 
-    def move_event_handle(self):
-        #handle hp --
-        attack_times = len(self.monster_attackers)
-        self.change_hp(-1*attack_times)
-
-        if self.food_new is not None:
-            can_eat_food = True
-            print('eat check')
-            for monster in self.monster_attackers:
-                if monster.get_rect().colliderect(self.food_new.get_rect() ):
-                    can_eat_food = False
-            if can_eat_food:
-                self.food_pack.append(self.food_new)
-                print('eat a new food : food len = %d'%(len(self.food_pack) ) )
-                self.food_new.eaten()
-
-
-
-        self.monster_attackers = []
-        self.food_new = None
+#    def move_event_handle(self):
+#        #handle hp --
+#        attack_times = len(self.monster_attackers)
+#        self.change_hp(-1*attack_times)
+#
+#        if self.food_new is not None:
+#            can_eat_food = True
+#            print('eat check')
+#            for monster in self.monster_attackers:
+#                if monster.get_rect().colliderect(self.food_new.get_rect() ):
+#                    can_eat_food = False
+#            if can_eat_food:
+#                self.food_pack.append(self.food_new)
+#                print('eat a new food : food len = %d'%(len(self.food_pack) ) )
+#                self.food_new.eaten()
+#
+#
+#
+#        self.monster_attackers = []
+#        self.food_new = None
 
     def dead(self):
         display.info_displayer.cls_info()
@@ -298,9 +300,16 @@ class Hero(Movable):
         display.wait_enter()
         display.info_displayer.cls_info()
         display.info_displayer.info_nextline("you relives and must go over all rooms again")
-        glb.hero = None
 
-        glb.init_game_entities()
+        glb.entity_list.remove(self)
+        glb.hero = None
+        glb.restart = True
+
+
+        glb.init_hero()
+        glb.init_room(0)
+
+        
 
 
     def decrease_cd(self):
@@ -554,5 +563,5 @@ class RandomMoveStragery:
         self.rest_step-=1
 
         #print((self.dx,self.dy))
-
-        return self.dx,self.dy
+        return 0,0
+        #return self.dx,self.dy

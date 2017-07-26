@@ -63,9 +63,14 @@ while glb.running:
     for move_obj in glb.movable_list[:] :
         if move_obj == glb.hero:
             continue
-        dx,dy = move_obj.next_step()
-        move_obj.move(dx,dy)
+        if move_obj in glb.movable_list:
+            dx,dy = move_obj.next_step()
+            move_obj.move(dx,dy)
+        if glb.restart:
+            glb.restart = False
+            break
         #move_obj.move(dx,dy)
+
     screen.fill((0, 0, 0),pygame.Rect(0,0,500,500))
     glb.render_all()
 

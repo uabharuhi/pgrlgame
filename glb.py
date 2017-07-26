@@ -11,6 +11,8 @@ running = True
 screen = None
 clock = None
 hero = None
+restart = False
+
 W = 20
 H = 20
 ETYPE_WALL = 0
@@ -63,12 +65,14 @@ attack_list = []
 
 
 def init_room(room_id,hero_pos=(40,200)):
-    global  walls,movable_list,door_list ,monster_list ,food_list
+    global  walls,movable_list,door_list ,monster_list ,food_list,entity_list,attack_list
 
-    walls = []
+
+    movable_list = []
     door_list = []
     monster_list = []
     food_list = []
+    attack_list = []
 
     init_wall_and_door(room_id)
 
@@ -78,6 +82,9 @@ def init_room(room_id,hero_pos=(40,200)):
 
 
 def  init_hero():
+    print('1234')
+    global entity_list
+    entity_list = []
     global hero
     #career = "warrior"
     career = "wizard"
@@ -155,15 +162,16 @@ def init_foods(room_id):
 
 
 def init_monsters(room_id):
-    init_info = [   ((360 ,40),0),((360,120),0),((360,200),0),
+    init_info = [   ((360 ,40),0),((360,120),1),((360,200),1),
                     ((360,40),1),((360,120),1),((360,200),1),((280,200),1),
                     ((360,40),2),((360,120),2),((360,200),2),((280,200),2),((280,300),2),
                     # ((560,240),3),((560,340),3),((420,240),3) ,
-                     #((360,240),4),((360,340),4),((220,240),4)
+                   #((360,240),4),((360,340),4),((220,240),4)
      ]
 
     for pos,rid in init_info:
         if rid == room_id:
+            print('175')
             m = entity.Monster(pos, ETYPE_MONSTER , W , DIRECTION_LEFT , rid)
             m.hp =2 
 
