@@ -152,17 +152,19 @@ class Monster (Movable):
         self.img_list.append("monster_left.png")
         self.load_imgs()
 
-        self.hp = 12
+        self.hp = 6
         self.room_id = room_id
         self.move_strategy = RandomMoveStragery()
 
         glb.monster_list.append(self)
 
     def decrease_hp(self,n):
+        print('??')
         if self.hp>0:
             self.hp-=n
-        if self.hp<0:
+        if self.hp <=0:
             self.hp = 0
+            self.dead()
 
     def on_monster_collision(self,hero):
         self.move_strategy.reset()
@@ -396,19 +398,19 @@ class Kirito(Hero):
                 if attack_idx>3:
                     attack_idx = 0
 
-            print('ccdd')
+          
             glb.clock.tick(4)
             glb.screen.fill((0, 0, 0),pygame.Rect(0,0,400,400))
             glb.render_all()
             self.current_cd =  self.attack_cd
-            #glb.clock.tick(10)
-            #glb.clock.tick(10)
+
 
 class Explosion(Movable):
 
     def __init__(self,pos,speed,direction):
          super().__init__(pos,glb.ETYPE_ATTACK,speed,direction)
          glb.attack_list.append(self)
+         self.destroyed = False
 
          if not self.in_boundary():
             self.destroy()
@@ -419,7 +421,9 @@ class Explosion(Movable):
          self.img_list.append("explosion.png")
          self.load_imgs()
 
-         self.time = 4
+         #handle the condition move function destroyed twice
+         self.time = 5
+         self.damage = 2
 
 
     def move(self,dx,dy):
@@ -438,30 +442,34 @@ class Explosion(Movable):
 
     def in_boundary(self):
         x,y = self.pos[0],self.pos[1]
-        if x > 380 or y>380 or y<20 or x<20 :
+        if x >= 380 or y>=380 or y<20 or x<20 :
             return False
         return True
     def next_step(self):
         dx,dy = 0,0
         if self.direction == glb.DIRECTION_UP:
-            dy = -1*glb.H
+            dy = -1*self.speed
         elif self.direction == glb.DIRECTION_RIGHT:
-            dx =  glb.W
+            dx =  self.speed
         elif self.direction == glb.DIRECTION_DOWN:
-            dy = glb.H
+            dy = self.speed
         elif self.direction == glb.DIRECTION_LEFT:
-            dx =  -1*glb.W
+            dx =  -1*self.speed
         return dx,dy
 
     def on_monster_collision(self,you):
         self.destroy()
-        pass
+        you.decrease_hp(self.damage)
+
+  
         #self.de
 
     def destroy(self):
-        glb.movable_list.remove(self)
-        glb.entity_list.remove(self)
-        glb.attack_list.remove(self)
+        if not self.destroyed :
+            glb.movable_list.remove(self)
+            glb.entity_list.remove(self)
+            glb.attack_list.remove(self)
+            self.destroyed = True
 
 
 
@@ -471,26 +479,29 @@ class Explosion(Movable):
 class Megumi(Hero):
 
         def attack(self):
+            self.attack_cd = 6
             self.create_explosions()
 
 
         def create_explosions(self):
+            if self.current_cd >0:
+                return 
             w,h = glb.W,glb.H
             x,y = self.pos[0],self.pos[1]
             if self.direction == glb.DIRECTION_UP:
-                pos_list = [(x,y-h),(x-w,y-h),(x+w,y-h),(x,y-2*h)]
+                pos_list = [(x,y),(x-w,y),(x+w,y),(x,y-h)]
             elif self.direction == glb.DIRECTION_RIGHT:
-                pos_list = [(x+w,y),(x+2*w,y),(x+w,y-h),(x+w,y+h)]
+                pos_list = [(x,y),(x,y+h),(x,y-h),(x+w,y)]
             elif self.direction == glb.DIRECTION_DOWN:
-                pos_list = [(x,y+h),(x-w,y+h),(x+w,y+h),(x,y+2*h)]
+                pos_list = [(x,y),(x-w,y),(x+w,y),(x,y+h)]
             elif self.direction == glb.DIRECTION_LEFT:
-                pos_list = [(x-w,y),(x-2*w,y),(x-w,y-h),(x-w,y+h)]
+                pos_list = [(x,y),(x-w,y),(x,y-h),(x,y+h)]
             ex_list = []
             for pos in pos_list:
-
-                ex = Explosion(pos,glb.W,self.direction)
+                #glb.W+10 :speed sightly faster than normal speed
+                ex = Explosion(pos,glb.W+10,self.direction)
                 ex_list.append(ex)
-
+            self.current_cd =  self.attack_cd
 
 
 

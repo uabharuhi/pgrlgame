@@ -39,5 +39,6 @@ only one room
 	display info
 goto next room when touch door
 room events : food,debuff,time limits...
-
+hero win
+hero relive
 hero use skill
