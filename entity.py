@@ -254,6 +254,7 @@ class Hero(Movable):
         # hp --
         if  monster not in self.monster_attackers:
             self.monster_attackers.append(monster)
+        self.change_hp(-1)
         return "STOP_MOVE"
 
     def on_food_collision(self,food):
