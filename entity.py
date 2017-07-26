@@ -229,23 +229,17 @@ class Hero(Movable):
 
         self.current_room +=1
 
-        glb.init_foods(self.current_room)
-        glb.init_monsters(self.current_room)
-
+        glb.init_room(self.current_room)
+       
 
     def on_door_collision(self,door):
 
-        if len(self.food_pack) == 4 :
+        if len(glb.monster_list) == 0  :
             #clear all door of current room
             for door in glb.door_list[:] :  #copy a list of door list because we delete item from this list
-                                                        #while iterate it
-                #print('door collision')
-                #print(door.room_id)
                 if door.room_id == self.current_room:
                     door.destroy()
-            for monster  in glb.monster_list[:]:
-                if monster.room_id == self.current_room:
-                    monster.dead()
+
             self.food_pack = []
 
             self.goto_next_room()

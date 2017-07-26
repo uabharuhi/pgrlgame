@@ -155,15 +155,17 @@ def init_foods(room_id):
 
 
 def init_monsters(room_id):
-    init_info = [ ((360 ,40),0),((360,120),0),((360,200),0),((360,280),0),((280,40),1),((280,120),1),
-                     ((560,40),2),((560,140),2),((420,40),2) ,
+    init_info = [   ((360 ,40),0),((360,120),0),((360,200),0),
+                    ((360,40),1),((360,120),1),((360,200),1),
+                     ((280,40),2),((560,140),2),((420,40),2) ,
                      ((560,240),3),((560,340),3),((420,240),3) ,
                      ((360,240),4),((360,340),4),((220,240),4)
      ]
 
     for pos,rid in init_info:
         if rid == room_id:
-            entity.Monster(pos, ETYPE_MONSTER , W , DIRECTION_LEFT , rid)
+            m = entity.Monster(pos, ETYPE_MONSTER , W , DIRECTION_LEFT , rid)
+            m.hp =2 
 
 def render_all():
 
