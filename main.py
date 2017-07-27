@@ -15,6 +15,11 @@ move_contraint = False #only can move once in one tick
 key_lock = [False,False,False,False]
 
 while glb.running:
+    #check win....
+    if glb.hero.current_room == 5 :
+        glb.win()
+        gg()
+
     glb.clock.tick(4)
     move_contraint = False
     glb.hero.decrease_cd()

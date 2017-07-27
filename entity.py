@@ -197,7 +197,7 @@ class Hero(Movable):
     def __init__(self,pos,speed,direction):
         etype = glb.ETYPE_HERO
         super().__init__(pos,etype,speed,direction)
-        self.hp = 3
+        self.hp = 5
         self.max_hp =  self.hp
         self.invincible = False
         self.invincible_restround =0
@@ -564,5 +564,5 @@ class RandomMoveStragery:
         self.rest_step-=1
 
         #print((self.dx,self.dy))
-        return 0,0
-        #return self.dx,self.dy
+        
+        return self.dx,self.dy

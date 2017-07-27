@@ -80,14 +80,44 @@ def init_room(room_id,hero_pos=(40,200)):
 
     init_monsters(room_id)
 
+def choose_career():
+    career = None
+    display.info_displayer.cls_info()
+    display.info_displayer.show_info('choose your career',(100,20))
+    display.info_displayer.show_info('1. warrior',(100,40))
+    display.info_displayer.show_info('2. wizard',(100,60))
+    pygame.display.flip()
+    flag = True
+    while(flag):
+        clock.tick(4)
+        for e in pygame.event.get():
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_1:
+                    print('1')
+                    carrer = "warrior"
+                    flag = False
+                    break
+                elif e.key == pygame.K_2:
+                    print('2')
+                    carrer = "wizard"
+                    flag = False
+                    break
+    display.info_displayer.cls_info()
+    display.info_displayer.show_info('game start',(100,20))
+    pygame.display.flip()
 
-def  init_hero():
+    return carrer
+
+
+def  init_hero(choose=False):
     print('1234')
-    global entity_list
+    global entity_list,hero
     entity_list = []
-    global hero
-    #career = "warrior"
-    career = "wizard"
+    career = None
+    if choose == True:
+        career = choose_career()
+
+    #career = "wizard"
     if career == "warrior":
         hero = entity.Kirito((0,0),W,DIRECTION_RIGHT)
     elif career=="wizard":
@@ -108,6 +138,8 @@ def init_wall_and_door(room_id):
         y += H
         x = 0
 
+
+
 def init_game():
     global screen,walls,doors,clock,hero
 
@@ -116,7 +148,7 @@ def init_game():
     screen = pygame.display.set_mode((800, 600))
     clock = pygame.time.Clock()
     # pos will after set by init_room
-    init_hero()
+    init_hero(True)
     if test_mode:
         hero.current_room = test_room
     if test_mode:
@@ -152,7 +184,7 @@ def init_foods(room_id):
                     ((220,20),1)  ,((220,160),1) , ((360,20),1) , ((360,160),1) , #1
                     ((420,20),2)  ,((420,160),2) , ((560,20),2) , ((560,160),2), # 2
                     ((420,220),3)  ,((420,360),3) , ((560,220),3) , ((560,360),3), # 3
-                     ((220,220),4)  ,((220,360),4) , ((360,220),4) , ((360,360),4), # 4
+                      ((420,220),4)  ,((420,360),4) , ((560,220),4) , ((560,360),4),# 4
                      #((20,220),5)  ,((20,360),5) , ((160,220),5) , ((160,360),5) # 5
 
                     ]
@@ -162,9 +194,12 @@ def init_foods(room_id):
 
 
 def init_monsters(room_id):
-    init_info = [   ((360 ,40),0),((360,120),1),((360,200),1),
-                    ((360,40),1),((360,120),1),((360,200),1),((280,200),1),
-                    ((360,40),2),((360,120),2),((360,200),2),((280,200),2),((280,300),2),
+    init_info = [   ((360 ,40),0),((360,120),0),
+                    ((360,200),1),((360,40),1),((360,120),1),
+                    ((360,40),2),((360,120),2),((360,200),2),((280,200),2),
+                      ((360,40),3),((360,120),3),((360,200),3),((280,200),3),((280,300),3),
+                        ((360,40),4),((360,120),4),((360,200),4),((280,200),4),((280,300),4)
+                    
                     # ((560,240),3),((560,340),3),((420,240),3) ,
                    #((360,240),4),((360,340),4),((220,240),4)
      ]
@@ -173,7 +208,7 @@ def init_monsters(room_id):
         if rid == room_id:
             print('175')
             m = entity.Monster(pos, ETYPE_MONSTER , W , DIRECTION_LEFT , rid)
-            m.hp =2 
+            m.hp = 2
 
 def render_all():
 
