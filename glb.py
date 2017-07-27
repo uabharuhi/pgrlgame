@@ -12,6 +12,7 @@ screen = None
 clock = None
 hero = None
 restart = False
+career = ""
 
 W = 20
 H = 20
@@ -81,6 +82,7 @@ def init_room(room_id,hero_pos=(40,200)):
     init_monsters(room_id)
 
 def choose_career():
+    global career
     career = None
     display.info_displayer.cls_info()
     display.info_displayer.show_info('choose your career',(100,20))
@@ -111,21 +113,32 @@ def choose_career():
 
 def  init_hero(choose=False):
     print('1234')
-    global entity_list,hero
+    global entity_list,hero,career
     entity_list = []
     career = None
     if choose == True:
         career = choose_career()
 
-    #career = "wizard"
     if career == "warrior":
         hero = entity.Kirito((0,0),W,DIRECTION_RIGHT)
     elif career=="wizard":
         hero = entity.Megumi((0,0),W,DIRECTION_RIGHT)
     else:
         assert False
+    #print(career)
 
+def relive():
+    global entity_list,hero
+    entity_list = []
 
+    _career = career
+    print(career)
+    if _career == "warrior":
+        hero = entity.Kirito((0,0),W,DIRECTION_RIGHT)
+    elif _career=="wizard":
+        hero = entity.Megumi((0,0),W,DIRECTION_RIGHT)
+    else:
+        assert False    
 def init_wall_and_door(room_id):
     x = y = 0
     for row in level:
@@ -149,6 +162,8 @@ def init_game():
     clock = pygame.time.Clock()
     # pos will after set by init_room
     init_hero(True)
+
+    print(career)
     if test_mode:
         hero.current_room = test_room
     if test_mode:
@@ -208,7 +223,7 @@ def init_monsters(room_id):
         if rid == room_id:
             print('175')
             m = entity.Monster(pos, ETYPE_MONSTER , W , DIRECTION_LEFT , rid)
-            m.hp = 2
+
 
 def render_all():
 

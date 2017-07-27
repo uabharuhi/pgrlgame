@@ -265,12 +265,13 @@ class Hero(Movable):
 
     def  change_hp(self,delta):
         self.hp += delta
+        print('12324')
         if self.hp <= 0:
             self.hp = 0
             self.dead()
 
         elif self.hp > self.max_hp:
-            self.hp = 10
+            self.hp = self.max_hp
 
 #    def move_event_handle(self):
 #        #handle hp --
@@ -305,9 +306,9 @@ class Hero(Movable):
         glb.entity_list.remove(self)
         glb.hero = None
         glb.restart = True
-
-
-        glb.init_hero()
+        print('3242')
+        print(glb.career)
+        glb.relive()
         glb.init_room(0)
 
         
@@ -333,7 +334,7 @@ class SwordAttack(Entity):
         l = self.get_collision_items(self.get_rect())
         for e in l:
             if e.etype == glb.ETYPE_MONSTER:
-                self.attacker.hp+=1
+                self.attacker.change_hp(1)
                 e.decrease_hp(self.damage)
 
     def render(self):
@@ -359,7 +360,8 @@ class Kirito(Hero):
             super().__init__(pos,speed,direction)
             self.attack_obj = None
             self.attack_cd = 4
-            self.hp = 10
+            self.hp = 5
+            self.max_hp = self.hp
 
         def attack(self):
             if  self.current_cd > 0 :
